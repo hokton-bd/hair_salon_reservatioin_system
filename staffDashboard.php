@@ -9,7 +9,7 @@
     }
 
     $staff_id = $retrieve->getStaffId($_SESSION['login_id']);
-
+    $shifts = $retrieve->getStaffShift($staff_id);
  ?>
     <!-- Hero Area Section Begin -->
     <?php include 'heroArea.php' ; ?>
@@ -18,6 +18,31 @@
     <div class="container">
 
         <h3 class="text-center text-white mb-5">Staff Dashboard</h3>
+
+        <div class="row mb-5">
+            <table class="table table-hover table-light text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>WEEK</th>
+                        <th>HOURS</th>
+                        <th>BREAK</th>
+                        <th>DAY OFF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if($shifts != 0) : ?>
+                    <?php foreach($shifts as $shift) : ?>
+                        <tr>
+                            <td><?= substr($shift['start_date'], 5)." - ".substr($shift['end_date'], 5); ?></td>
+                            <td><?= substr($shift['shift_start'], 0, 5)." - ".substr($shift['shift_end'], 0, 5); ?></td>
+                            <td><?= substr($shift['break_start'], 0, 5)." - ".substr($shift['break_end'], 0, 5); ?></td>
+                            <td class="text-uppercase"><?= substr($shift['day_off'], 5); ?></td>
+                        </tr>
+                    <?php endforeach ; ?>
+                    <?php endif ; ?>
+                </tbody>
+            </table>
+        </div>
 
         <div class="row row-cols-1 row-cols-md-2">
 

@@ -127,6 +127,27 @@
             }
         }
 
+        public function addShift() {
+            $staff_id = $_POST['staff_list'];
+            $start_date = $_POST['start_date'];
+            $end_date = $_POST['end_date'];
+            $start_time = $_POST['start_time'];
+            $end_time = $_POST['end_time'];
+            $break_time = $_POST['break_time'];
+            $day_off = $_POST['day_off'];
+
+            $timestamp = strtotime($break_time) + 3600;
+            $break_end = date('H:i', $timestamp);
+
+            $sql_c = "INSERT INTO schedule(staff_id, start_date, end_date, shift_start, shift_end, break_start, break_end, day_off) VALUES ('$staff_id', '$start_date', '$end_date', '$start_time', '$end_time', '$break_time', '$break_end', '$day_off')";
+
+            if($start_date > date('Y-m-d') && $start_date < $end_date && $this->conn->query($sql_c)) {
+                return true;
+            } else {
+                echo $this->conn->error;
+            }
+        }
+
 
 
     } //end of class

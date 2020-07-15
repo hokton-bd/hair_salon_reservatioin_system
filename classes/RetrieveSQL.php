@@ -752,6 +752,44 @@
 
         }
 
+        public function getAllSchedule() {
+            $sql_r = "SELECT * FROM schedule";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+                return $rows;
+            } 
+        }
+
+        public function getComingStaffShift($staff_id) {
+            $sql_r = "SELECT * FROM schedule WHERE staff_id = '$staff_id' AND shift_status = 'A' ORDER BY end_date ASC LIMIT 1";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                return $row['end_date'];
+            } else {
+                return 0;
+            }
+        }
+
+        public function getStaffShift($staff_id) {
+            $sql_r = "SELECT * FROM schedule WHERE staff_id = '$staff_id' AND shift_status = 'A' ORDER BY start_date ASC LIMIT 2";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+                return $rows;
+            } else {
+                return 0;
+            }
+        }
+
     } //end of class
     
 ; ?>

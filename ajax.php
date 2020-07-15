@@ -19,13 +19,12 @@
     </label>
 <?php endforeach ; endif; ?>
 
-<!-- delete message -->
-<?php if(isset($_GET['cm']) == "t") {
+<?php //delete message 
+    if(isset($_GET['cm']) == "t") { 
     $_SESSION['message'] = "";
 } ; ?>
 
-<!-- date select -->
-<?php 
+<?php //date select 
     if(isset($_GET['date'])) :
         $date = $_GET['date'];
             $services = $retrieve->getAllServices();
@@ -115,8 +114,8 @@
     </table>
 <?php endif ; ?>
 
-<!-- monthly report -->
-<?php 
+
+<?php //monthly report
     if(isset($_GET['month'])) :
         $month = $_GET['month'];
             $services = $retrieve->getAllServices();

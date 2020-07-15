@@ -223,6 +223,14 @@
             // echo $create->error;
         }
 
+    } else if(isset($_POST['add_shift'])) {
+
+        if($create->addShift() == true) {
+            header("Location: schedule.php");
+        } else {
+            echo "FAIL";
+        }
+
     } else if($_GET['actiontype'] == "change") { //change service status
 
         $service_id = $_GET['id'];

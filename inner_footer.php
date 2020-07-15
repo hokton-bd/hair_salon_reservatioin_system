@@ -124,6 +124,38 @@
 
             });
 
+            //check overlapping shift
+            $('#staff_list').change(function() {
+                var staff_id = $(this).val();
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'shift_ajax.php',
+                    data:{id:staff_id},
+                    success: function(data) {
+                        data = $.trim(data);
+                        $('#start_date').attr('min', data);
+                    }
+                });
+
+            });
+
+            $('#start_date').change(function() {
+                var start_date = $('#start_date').val();
+                $('#end_date').attr('min', start_date);
+
+            });
+
+            $('#start_date').change(function() {
+                $('#end_date').change(function() {
+                    var start_date = $('#start_date').val();
+                    var end_date = $('#end_date').val();
+
+                    $('#day_off').attr({'min':start_date, 'max':end_date});
+                });
+
+            });
+
         });
 
         

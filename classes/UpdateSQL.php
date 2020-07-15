@@ -257,7 +257,12 @@
             }
         }
 
+        public function changeShiftStatus($schedule_id) {
+            $sql_u = "UPDATE schedule SET shift_status = 'D' WHERE schedule_id = '$schedule_id'";
 
+            $this->conn->query($sql_u);
+
+        }
        
     }
     

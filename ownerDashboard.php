@@ -61,6 +61,7 @@
                             <div class="dropdown-menu staff-menu">
                                 <a class="dropdown-item" href="addStaff.php">Add New Staff</a>
                                 <a class="dropdown-item" href="allStaffs.php">Browse Staffs</a>
+                                <a class="dropdown-item" href="schedule.php">Browse Schedule</a>
                             </div>
                         </div>
 
