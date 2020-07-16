@@ -22,7 +22,7 @@
 
         <form action="action.php" method="post" class="mx-auto py-5">
             <div class="row mx-auto mb-4">
-                <input class="form-control col-3 mx-auto" type="date" name="date" id="" value="<?= $_SESSION['date']; ?>">
+                <input class="form-control col-3 mx-auto" type="date" name="date" id="reserve_date" value="<?= $_SESSION['date']; ?>">
                 <input class="form-control col-3 mx-auto" type="time" name="time" id="" value="<?= $_SESSION['time']; ?>" min="10:00" max="18:00">
                 <select name="service" class="form-control text-uppercase mx-auto col-3" id="service-list">
                     <?php foreach($rows as $row) : ?>
@@ -42,6 +42,7 @@
             <div id="staff-select" class="row mx-auto mb-4">
                 <h5 class="text-center text-light col-12 mb-2">Choose Staff</h5>
                 <?php foreach($retrieve->getServiceStaff($_SESSION['service']) as $staff) : ?>
+                <?php if($retrieve->getDateShift($_SESSION['date'], $staff['staff_id']) == true) : ?>
                 <label for="<?= $staff['staff_id']; ?>" class="col-4">
                     <div class="staff-img-box mb-2">
                         <img class="staff-img" src="img/staffs/<?= $staff['picture']?>" alt="">
@@ -49,6 +50,7 @@
                     <input type="radio" class="staff-radio"  name="staff" value="<?= $staff['staff_id']?>" id="<?= $staff['staff_id']?>" required>
                     <span class="staff-name ml-3 text-light text-center mx-auto"><?= $staff['name']; ?></span>
                 </label>
+                <?php endif ; ?>
                 <?php endforeach ; ?>
             </div>
 

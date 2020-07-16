@@ -50,8 +50,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if($retrieve->getDailyReservations($date) != false) :
-                                    $daily_reservations = $retrieve->getDailyReservations($date);
+                            <?php if($retrieve->getDailyDoneReservations($date) != false) :
+                                    $daily_reservations = $retrieve->getDailyDoneReservations($date);
                                     foreach($daily_reservations as $reservation) :
                                         $user_name = $retrieve->getUserNameById($reservation['user_id']);
                                         $service_name = $retrieve->getServiceNameById($reservation['service_id']);

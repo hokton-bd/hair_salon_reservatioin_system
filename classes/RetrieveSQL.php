@@ -642,8 +642,23 @@
         } //end of getReservationInfo
 
         
-        public function getDailyReservations($date) {
+        public function getDailyDoneReservations($date) {
             $sql_r = "SELECT * FROM reservations WHERE reservation_date = '$date' AND reservation_status = 'D' ORDER BY service_id ASC";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+                return $rows;
+            } else {
+                return 0;
+            }
+        }
+        
+        public function getDailyReservations($date) {
+            $sql_r = "SELECT * FROM reservations WHERE reservation_date = '$date' AND reservation_status != 'C' ORDER BY reservation_time ASC";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -660,8 +675,8 @@
 
         public function calcDailyProfits($date) {
 
-           if($this->getDailyReservations($date) != false) {
-               $daily_reservations = $this->getDailyReservations($date);
+           if($this->getDailyDoneReservations($date) != false) {
+               $daily_reservations = $this->getDailyDoneReservations($date);
                $total = 0;
                foreach($daily_reservations as $reservation) {
                    $total = $total + $reservation['payment'];
@@ -676,8 +691,8 @@
 
         public function calcMonthlyProfits($month) {
 
-           if($this->getMonthlyReservations($month) != false) {
-               $monthly_reservations = $this->getMonthlyReservations($month);      
+           if($this->getMonthlyDoneReservations($month) != false) {
+               $monthly_reservations = $this->getMonthlyDoneReservations($month);      
                $total = 0;
                foreach($monthly_reservations as $reservation) {
                    $total = $total + $reservation['payment'];
@@ -690,8 +705,22 @@
             }
         }
 
-        public function getMonthlyReservations($month) {
+        public function getMonthlyDoneReservations($month) {
             $sql_r = "SELECT * FROM reservations WHERE MONTH(reservation_date) = '$month' AND reservation_status = 'D' ORDER BY reservation_date ASC";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+                return $rows;
+            } else {
+                return 0;
+            }
+        }
+
+        public function getMonthlyReservations($month) {
+            $sql_r = "SELECT * FROM reservations WHERE MONTH(reservation_date) = '$month' ORDER BY reservation_date ASC";
             $result = $this->conn->query($sql_r);
             if($result->num_rows > 0) {
                 $rows = array();
@@ -787,6 +816,16 @@
                 return $rows;
             } else {
                 return 0;
+            }
+        }
+
+        public function getDateShift($date, $staff_id) {
+            $sql_r = "SELECT * FROM schedule WHERE staff_id = '$staff_id' AND day_off = '$date'";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows == 0) {
+                return true;
+            } else {
+                return false;
             }
         }
 

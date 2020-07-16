@@ -1860,6 +1860,25 @@ makeReservation.php
 }
 
 
+/* ======================================
+owner_reservation.php
+====================================== */
+.weekly-reservations-list {
+	width: 100%;
+}
+
+.weekly-reservations {
+	width: calc(100% / 7 - 1rem);
+	margin-right: 0.5rem;
+	background-color: #fff;
+}
+
+.weekly-reservations:last-child {
+	margin-right: 0;
+}
+
+
+
 /* ----------------------------- Responsive Media Styles -----------------------------*/
 
 @media only screen and (min-width: 1500px) and (max-width: 1920px) {

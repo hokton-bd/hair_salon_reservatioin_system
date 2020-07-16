@@ -108,6 +108,7 @@
                             </button>
                             <div class="dropdown-menu reports-menu">
                                 <a class="dropdown-item" href="reports.php">Browse Reports</a>
+                                <a class="dropdown-item" href="owner_reservations.php">Browse Reservations</a>
                             </div>
                         </div>
 

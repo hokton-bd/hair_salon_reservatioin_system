@@ -61,16 +61,32 @@
         $(document).ready(function() {
             $("#service-list").change(function() {
                 var getServiceID = $(this).val();
-
+                var reserve_date = $('#reserve_date').val();
                 $.ajax({
                     type: 'GET',
                     url: 'ajax.php',
-                    data: {service:getServiceID},
+                    data: {service:getServiceID, reserve_date:reserve_date},
                     success: function(data) {
                         $("#staff-select").html(data);
                     } 
                 });
+
             });
+
+            $('#reserve_date').change(function() {
+                var reserve_date = $(this).val();
+                var service_list = $('#service-list').val();
+
+                $.ajax({
+                    type:'GET',
+                    url:'shift_ajax.php',
+                    data:{reserve_date:reserve_date, service_id:service_list},
+                    success:function(data) {
+                        $('#staff-select').html(data);
+                    }
+                })
+            })
+
 
             $(window).reload(function() {
                 $.ajax({
@@ -155,6 +171,8 @@
                 });
 
             });
+
+            
 
         });
 

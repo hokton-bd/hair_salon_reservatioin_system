@@ -10,7 +10,7 @@
                             <div class="date-pick mx-auto w-25">
                                 <p>DATE</p>
                                 <!-- <input type="date" name="date" class="datepicker-1" value="yyyy / mm / dd"> -->
-                                <input class="form-control" type="date" name="date" id="calender" value="yyy/md/dd" required>
+                                <input class="form-control" type="date" name="date" id="calender" value="yyy/md/dd" required min="<?= date('Y-m-d'); ?>">
                                 <input class="form-control reserve-time" type="time" name="time" id="" value="" min="10:00" max="18:00" required>
                                 <small class="office-hour">Choose 10:00 - 18:00</small>
                                 <!-- <img src="img/calendar.png" alt=""> -->

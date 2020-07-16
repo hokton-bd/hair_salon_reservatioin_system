@@ -5,9 +5,12 @@
     $retrieve = new RetrieveSQLStatements();
 
     if(isset($_GET['service'])) : 
+        $reserve_date = $_GET['reserve_date'];
         $service_id = intval($_GET['service']);
         $staffs = $retrieve->getServiceStaff($service_id);
         foreach($staffs as $staff) :
+            if($retrieve->getDateShift($reserve_date, $staff['staff_id']) == true) :
+            
 ?>  
     <h5 class="text-center text-light col-12 mb-2">Choose Staff</h5>
     <label for="<?= $staff['staff_id']; ?>" class="col-4">
@@ -17,7 +20,8 @@
         <input type="radio" class="staff-radio"  name="staff" value="<?= $staff['staff_id']?>" id="<?= $staff['staff_id']?>" required>
         <span class="staff-name ml-3 text-light text-center mx-auto"><?= $staff['name']; ?></span>
     </label>
-<?php endforeach ; endif; ?>
+<?php endif; endforeach ; endif; ?>
+
 
 <?php //delete message 
     if(isset($_GET['cm']) == "t") { 
@@ -28,7 +32,7 @@
     if(isset($_GET['date'])) :
         $date = $_GET['date'];
             $services = $retrieve->getAllServices();
-            $reservations = $retrieve->getDailyReservations($date);
+            $reservations = $retrieve->getDailyDoneReservations($date);
 ?>
 <h5 class="text-center text-light col-12 mb-2">Daily Report</h5>
     <table class="table table-light mb-0 text-center">
@@ -119,7 +123,7 @@
     if(isset($_GET['month'])) :
         $month = $_GET['month'];
             $services = $retrieve->getAllServices();
-            $monthly_reservations = $retrieve->getMonthlyReservations($month);
+            $monthly_reservations = $retrieve->getMonthlyDoneReservations($month);
 ?>
 
 <h5 class="text-center text-light col-12 mb-2">Monthly Report</h5>
