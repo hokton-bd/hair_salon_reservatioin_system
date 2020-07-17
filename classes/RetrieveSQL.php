@@ -757,7 +757,7 @@
 
         
         public function getDailyDoneReservations($date) {
-            $sql_r = "SELECT * FROM reservations WHERE reservation_date = '$date' AND reservation_status = 'D' ORDER BY service_id ASC";
+            $sql_r = "SELECT * FROM reservations WHERE reservation_date = '$date' AND reservation_status != 'C' ORDER BY service_id ASC";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -820,7 +820,7 @@
         }
 
         public function getMonthlyDoneReservations($month) {
-            $sql_r = "SELECT * FROM reservations WHERE MONTH(reservation_date) = '$month' AND reservation_status = 'D' ORDER BY reservation_date ASC";
+            $sql_r = "SELECT * FROM reservations WHERE MONTH(reservation_date) = '$month' AND reservation_status != 'C' ORDER BY reservation_date ASC";
             $result = $this->conn->query($sql_r);
             if($result->num_rows > 0) {
                 $rows = array();
@@ -848,7 +848,7 @@
         }
 
         public function calcServiceProfit($service_id, $date) {
-            $sql_r = "SELECT * FROM reservations WHERE service_id = '$service_id' AND reservation_date = '$date' AND reservation_status = 'D'";
+            $sql_r = "SELECT * FROM reservations WHERE service_id = '$service_id' AND reservation_date = '$date' AND reservation_status != 'C'";
             $result = $this->conn->query($sql_r);
             if($result->num_rows > 0) {
                 $total = 0;
@@ -860,11 +860,11 @@
         }
 
         public function calcMonthlyServiceProfit($service_id, $month) {
-            $sql_r = "SELECT * FROM reservations WHERE MONTH(reservation_date) = '$month' AND reservation_status = 'D' AND service_id = '$service_id'";
+            $sql_r = "SELECT * FROM reservations WHERE MONTH(reservation_date) = '$month' AND reservation_status != 'C' AND service_id = '$service_id'";
             $result = $this->conn->query($sql_r);
 
+            $total = 0;
             if($result->num_rows > 0) {
-                $total = 0;
                 while($row = $result->fetch_assoc()) {
                     $total = $total + $row['payment'];
                 }
@@ -872,7 +872,7 @@
                 return $total;
 
             } else {
-                return 0;
+                return $total;
             }
 
         }
@@ -943,26 +943,45 @@
             }
         }
 
-        // public function getCouponReports() {
+        public function getDailyCustomers($date, $service_id) {
+            $sql_r = "SELECT * FROM reservations WHERE service_id = '$service_id' AND reservation_date = '$date'";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
+        }
 
-        //     $sql_r = "SELECT * FROM coupons";
-        //     $result = $this->conn->query($sql_r);
+        public function getDailyTotalCustomers($date) {
+            $sql_r = "SELECT * FROM reservations WHERE reservation_status != 'C' AND reservation_date = '$date'";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
+        }
 
-        //     if($result->num_rows > 0) {
-        //         $rows = array();
-        //         $count = 0;
-        //         while($row = $result->fetch_assoc()) {
+        public function getMonthlyCustomers($month, $service_id) {
+            $sql_r = "SELECT * FROM reservations WHERE service_id = '$service_id' AND MONTH(reservation_date) = '$month'";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
+        }
 
-        //             if($row['coupon_name'] == ) {
-        //                 continue;
-        //             }
-
-        //             $rows[] = $row;
-        //         }
-        //         return $rows;
-        //     }
-
-        // }
+        public function getMonthlyTotalCustomers($month) {
+            $sql_r = "SELECT * FROM reservations WHERE reservation_status != 'C' AND MONTH(reservation_date) = '$month'";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
+        }
 
     } //end of class
     

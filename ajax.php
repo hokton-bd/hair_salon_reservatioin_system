@@ -114,6 +114,13 @@
                         <td>0.00</td>
                     <?php endif ; ?>
                 </tr>
+                <tr>
+                    <?php foreach($services as $service) : ?>
+                    <?php if($service['service_status'] == "A") : ?>
+                        <td><?= $retrieve->getDailyCustomers($date, $service['service_id']); ?></td>
+                    <?php endif; endforeach ; ?>
+                    <td><?= $retrieve->getDailyTotalCustomers($date); ?></td>
+                </tr>
         </tbody>
     </table>
 <?php endif ; ?>
@@ -242,6 +249,12 @@
                     <?php endforeach ; ?>
                     <td>0.00</td>
                 <?php endif ; ?>
+            </tr>
+            <tr>
+                <?php foreach($services as $service) : if($service['service_status'] == "A") : ?>
+                    <td><?= $retrieve->getMonthlyCustomers($month, $service['service_id']); ?></td>
+                <?php endif; endforeach ; ?>
+                <td><?= $retrieve->getMonthlyTotalCustomers($month); ?></td>
             </tr>
         </tbody>
     </table>
