@@ -190,6 +190,7 @@
                 } else {
                     echo $this->conn->error;
                 }
+                
             } else {
 
                 $sql_u = "UPDATE reservations SET reservation_status = 'O' WHERE reservation_id = '$reservation_id'";
@@ -228,7 +229,7 @@
 
         public function userCouponDone($uc_id) {
             if($uc_id != 0) { // user use coupon
-                $sql_u = "UPDATE user_coupons SET uc_status = 'D' WHERE uc_id = '$uc_id'";
+                $sql_u = "UPDATE user_coupons SET uc_status = 'R' WHERE uc_id = '$uc_id'";
                 if($this->conn->query($sql_u)) {
                     return true;
                 } else {
@@ -262,6 +263,13 @@
 
             $this->conn->query($sql_u);
 
+        }
+
+        public function addVisitedAmount($user_id) {
+            $visited_amount++;
+            $sql_u = "UPDATE users SET visited_amount = '$visited_amount' WHERE user_id = '$user_id'";
+
+            
         }
        
     }

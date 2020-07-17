@@ -104,15 +104,17 @@
             $value = $_POST['value'];
             $expiration = $_POST['expiration'];
             $desc = $_POST['desc'];
+            $amount = $_POST['amount_coupons'];
 
             $sql_c = "INSERT INTO coupons(coupon_name, coupon_value, expiration, description) VALUES ('$name', '$value', '$expiration', '$desc')";
 
-            if($this->conn->query($sql_c)) {
-                return true;
-            } else {
-                // return false;
-                echo $this->conn->error;
+
+            for($i = 0; $i < $amount; $i++) {
+                $this->conn->query($sql_c);
             }
+
+            return true;
+            
 
         }
 

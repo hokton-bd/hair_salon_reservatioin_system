@@ -441,6 +441,75 @@
 
         } //end of getUserHistoryReservation
 
+        public function getDoneReservations($user_id) {
+            $sql_r = "SELECT * FROM reservations WHERE user_id = '$user_id' AND reservation_status = 'D' ORDER BY reservation_date DESC";
+
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $rows = array();
+
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
+
+        } //end of getUserHistoryReservation
+
+        public function getTotalReservations($user_id) {
+            $sql_r = "SELECT * FROM reservations WHERE user_id = '$user_id' AND reservation_status = 'D' ORDER BY reservation_date DESC";
+
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+
+                return [$result->num_rows, $rows];
+            } else {
+                return 0;
+            }
+
+        } //end of getUserHistoryReservation
+
+        public function getCanceledReservations($user_id) {
+            $sql_r = "SELECT * FROM reservations WHERE user_id = '$user_id' AND reservation_status = 'C' ORDER BY reservation_date DESC";
+
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+
+                return [$result->num_rows, $rows];
+            } else {
+                return [0, 0];
+            }
+
+        } //end of getUserHistoryReservation
+
+        public function getOpenReservations($user_id) {
+            $sql_r = "SELECT * FROM reservations WHERE user_id = '$user_id' AND reservation_status = 'O' ORDER BY reservation_date DESC";
+
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+
+                return [$result->num_rows, $rows];
+            } else {
+                return 0;
+            }
+
+        } //end of getUserHistoryReservation
+
         public function getServiceImage($service_id) {
             $sql_r = "SELECT * FROM services WHERE service_id = '$service_id'";
             $result = $this->conn->query($sql_r);
@@ -549,7 +618,7 @@
 
         public function getAllCoupons() {
 
-            $sql_r = "SELECT * FROM coupons WHERE coupon_status = 'A'";
+            $sql_r = "SELECT coupon_name, coupon_value, expiration, description, coupon_status, COUNT(*) FROM coupons WHERE coupon_status = 'A' GROUP BY coupon_name";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -560,6 +629,51 @@
                 return $rows;
             } else {
                 return false;
+            }
+
+        }
+
+        public function getUsedCoupons($coupon_name) {
+
+            $sql_r = "SELECT * FROM user_coupons INNER JOIN coupons ON user_coupons.coupon_id = coupons.coupon_id WHERE coupons.coupon_name = '$coupon_name' AND user_coupons.uc_status = 'R'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+
+                return $result->num_rows;
+
+            } else {
+                return 0;
+            }
+
+        }
+
+        public function getHandCoupons($coupon_name) {
+
+            $sql_r = "SELECT * FROM user_coupons INNER JOIN coupons ON user_coupons.coupon_id = coupons.coupon_id WHERE coupons.coupon_name = '$coupon_name' AND user_coupons.uc_status = 'A'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+
+                return $result->num_rows;
+
+            } else {
+                return 0;
+            }
+
+        }
+
+        public function getLeftCoupons($coupon_name) {
+
+            $sql_r = "SELECT * FROM coupons WHERE coupon_name = '$coupon_name' AND coupon_status = 'A'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+
+                return $result->num_rows;
+
+            } else {
+                return 0;
             }
 
         }
@@ -828,6 +942,27 @@
                 return false;
             }
         }
+
+        // public function getCouponReports() {
+
+        //     $sql_r = "SELECT * FROM coupons";
+        //     $result = $this->conn->query($sql_r);
+
+        //     if($result->num_rows > 0) {
+        //         $rows = array();
+        //         $count = 0;
+        //         while($row = $result->fetch_assoc()) {
+
+        //             if($row['coupon_name'] == ) {
+        //                 continue;
+        //             }
+
+        //             $rows[] = $row;
+        //         }
+        //         return $rows;
+        //     }
+
+        // }
 
     } //end of class
     

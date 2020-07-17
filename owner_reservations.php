@@ -184,7 +184,9 @@ $plus_three = date('Y-m-d', strtotime('+3days'));
                                                 <?php foreach($retrieve->getCouponInfo($reservation['uc_id']) as $coupon) : ?>
                                                     <?= $coupon['coupon_name']; ?><br>
                                                     <?php echo $coupon['coupon_value'] ; ?>
-                                                <?php endforeach ; endif; ?>
+                                                <?php endforeach ; else: ?>
+                                                    ------
+                                                <?php endif ; ?>
                                             </p>
                                         </div>
                                     </div>

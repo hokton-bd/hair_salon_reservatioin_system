@@ -32,6 +32,9 @@
             <div class="row col-12 mb-3">
                 <textarea class="form-control mx-auto col-6" name="desc" id="" cols="30" rows="10" style="resize: none;" placeholder="Message"></textarea>
             </div>
+            <div class="row col-12 mb-3">
+                <input class="form-control col-6 mx-auto" type="number" name="amount_coupons" id="" placeholder="How many do you make?" required min="1">
+            </div>
 
             <input type="submit" value="Add" name="generate_coupon" class="form-control btn form-btn col-3">
         </form>
@@ -40,7 +43,7 @@
             <table class="table table-hover table-light text-center">
                 <thead class="thead-dark">
                     <tr>
-                        <th>#</th>
+                        <th>NUMBER</th>
                         <th>NAME</th>
                         <th>VALUE</th>
                         <th>EXPIRATION</th>
@@ -49,9 +52,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($rows as $row) : ?>
+                    <?php if($rows != 0) : foreach($rows as $row) : ?>
                         <tr>
-                            <td><?= $row['coupon_id']; ?></td>
+                            <td><?= $row['COUNT(*)']; ?></td>
                             <td><?= $row['coupon_name']; ?></td>
                             <td><?= $row['coupon_value']; ?> %</td>
                             <td><?= $row['expiration']; ?></td>
@@ -94,7 +97,7 @@
                                     </div><!--modal dialog-->
                                 </div><!--modal-->
 
-                    <?php endforeach ; ?>
+                    <?php endforeach ; endif;?>
                 </tbody>
             </table>
         </div>
