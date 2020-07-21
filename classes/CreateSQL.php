@@ -17,8 +17,22 @@
                 $sql_c_u = "INSERT INTO users(name, birthday, gender, contact_number, login_id) VALUES ('$name', '$birthday', '$gender', '$contact_num', '$login_id')";
 
                 if($this->conn->query($sql_c_u)) {
-                    $_SESSION['message'] = "";
+
+                    $toEmail = $email;
+                    $subject = "User Registration Email";
+                    $content = "Thank you for registration";
+                    $mailHeaders = "From: one.for.all_ysdc@icloud.com";
+                    if(mail($toEmail, $subject, $content, $mailHeaders)) {
+
+                        unset($_POST);
+                        $_SESSION['message'] = "success";
+
+                    } else {
+                        echo "Fail";
+                    }
+
                     header("Location: login.php");
+
                 } else {
                     echo "Inserting in users table: ".$this->conn->error;
                 } 
@@ -54,6 +68,7 @@
             $staff_name = $_POST['staff_name'];
             $gender = $_POST['gender'];
             $position = $_POST['position'];
+            $service_id = $_POST['service'];
             $pic_name = $_FILES['staff_picture']['name'];
             $email = $_POST['email'];
             $pass = md5($_POST['pass']);
@@ -65,13 +80,42 @@
                 $login_id = $this->conn->insert_id;
                 
                 $target_file = $target_dir.basename($pic_name);
-                $sql_c_s = "INSERT INTO staff_owner(name, gender, position, picture, login_id) 
-                        VALUES ('$staff_name', '$gender', '$position', '$pic_name', '$login_id')";
+                $sql_c_s = "INSERT INTO staff_owner(name, gender, service_id, position, picture, login_id) 
+                        VALUES ('$staff_name', '$gender', '$service_id', '$position', '$pic_name', '$login_id')";
 
                 if($this->conn->query($sql_c_s)) {
                     $_SESSION['message'] = "";
                     move_uploaded_file($_FILES['staff_picture']['tmp_name'], $target_file);
                     echo "<script>window.location = 'addStaff.php'</script>";
+                } else {
+                    echo $this->conn->error;
+                }
+            }
+
+        } //end of addService
+
+        public function addOwner() {
+
+            $owner_name = $_POST['owner_name'];
+            $gender = $_POST['gender'];
+            $position = $_POST['position'];
+            $pic_name = $_FILES['picture']['name'];
+            $email = $_POST['email'];
+            $pass = md5($_POST['pass']);
+            $target_dir = "img/owner/";
+
+            $sql_c_l = "INSERT INTO login(email, password, status) VALUES ('$email', '$pass', 'O')";
+ 
+            if($this->conn->query($sql_c_l)) {
+                $login_id = $this->conn->insert_id;
+                
+                $target_file = $target_dir.basename($pic_name);
+                $sql_c_s = "INSERT INTO staff_owner(name, gender,  picture, position,login_id) 
+                        VALUES ('$owner_name', '$gender', '$pic_name', '$position', '$login_id')";
+
+                if($this->conn->query($sql_c_s)) {
+                    move_uploaded_file($_FILES['picture']['tmp_name'], $target_file);
+                    echo "<script>window.location = 'add_ownerAccount.php'</script>";
                 } else {
                     echo $this->conn->error;
                 }
@@ -148,6 +192,23 @@
             } else {
                 echo $this->conn->error;
             }
+        }
+
+        public function review() {
+
+            $reservation_id = $_POST['reservation_id'];
+            $rate_service = $_POST['rate_service'];
+            $rate_staff = $_POST['rate_staff'];
+            $comment = $_POST['comment'];
+
+            $sql_c = "INSERT INTO reviews(comment, service_rating, staff_rating, reservation_id) VALUES ('$comment', '$rate_service', '$rate_staff', '$reservation_id')";
+
+            if($this->conn->query($sql_c)) {
+                return true;
+            } else {
+                echo $this->conn->error;
+            }
+
         }
 
 

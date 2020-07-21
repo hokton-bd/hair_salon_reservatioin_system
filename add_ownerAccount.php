@@ -4,14 +4,12 @@
         header("Location: login.php");
 
     }
-    if($_SESSION['status'] != "O") {
+    if($_SESSION['status'] != "A") {
         header("Location: index.php");    
     }
     if($_SESSION['admin_status'] == "D") {
         header("Location: login.php");
     }
-
-    $services = $retrieve->getAllServices();
 ?>
     <!-- Hero Area Section Begin -->
     <?php include 'heroArea.php' ; ?>
@@ -21,11 +19,11 @@
     <div class="container">
 
         <a href="ownerDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>
-        <h3 class="text-center text-white mb-5 d-inline-block ml-5">Add New Staff</h3>
+        <h3 class="text-center text-white mb-5 d-inline-block ml-5">Add New Owner</h3>
 
         <form method="post" action="action.php" class="row mx-auto" enctype="multipart/form-data">
             <div class="col-6">
-                <input type="text" name="staff_name" id="" class="form-control mb-3" placeholder="Name" required>
+                <input type="text" name="owner_name" id="" class="form-control mb-3" placeholder="Name" required>
             </div>
             <div class="row col-5 ml-1">
                 <label class="text-white mr-3" for="male">Male<input class="ml-1" type="radio" name="gender" id="male" value="male" required></label>
@@ -37,18 +35,9 @@
                 <input type="text" name="position" class="form-control" placeholder="Position" required>
             </div>
 
-            <div class="col-6 mb-3">
-                <select name="service" id="" class="form-control text-uppercase">
-                    <?php foreach($services as $service) : ?>
-                    <?php if($service['service_status'] == "A") : ?>
-                        <option value="<?= $service['service_id']?>" class="text-uppercase"><?= $retrieve->getServiceNameById($service['service_id']) ;?></option>
-                    <?php endif; endforeach; ?>
-                </select>
-            </div>
-
             <div class="input-group mb-3 col-6 mr-0">
                 <div class="custom-file mr-0">
-                    <input type="file" name="staff_picture" class="custom-file-input mr-0" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" required>
+                    <input type="file" name="picture" class="custom-file-input mr-0" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" required>
                     <label class="custom-file-label mr-0" for="inputGroupFile01">Choose file</label>
                 </div>
             </div>
@@ -59,7 +48,7 @@
                     <input type="password" name="pass" id="" class="form-control" placeholder="Password" required>
                 </div>
         
-            <input class="form-control btn form-btn col-3 mx-auto mt-5" type="submit" name="add_staff" value="Add">
+            <input class="form-control btn form-btn col-3 mx-auto mt-5" type="submit" name="add_owner" value="Add">
         </form>   
 
     </div><!--end container-->

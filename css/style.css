@@ -278,6 +278,7 @@ ol {
 
 .inner-header .logo a {
 	display: inline-block;
+	width: 79%;
 }
 
 .inner-header .nav-right {
@@ -1786,6 +1787,15 @@ allServices.php
 
 
 /* ======================================
+allCustomers.php
+====================================== */
+.status-badge {
+	top: 0;
+	left: 0;
+}
+
+
+/* ======================================
 allStaffs.php
 ====================================== */
 .staff-update-btn {
@@ -1885,6 +1895,37 @@ coupon_reports.php
 	width: 16.6666666%;
 }
 
+
+/* ======================================
+heroArea.php
+====================================== */
+#login-name {
+	color: #CD1F14;
+}
+
+#login-name:hover {
+	opacity: .8;
+	text-decoration: underline;
+}
+
+
+/* ======================================
+userDashboard.php
+====================================== */
+.review-item {
+	position: relative;
+	margin: 0 auto;
+}
+
+.review_num{
+	position: absolute;
+	top: -100%;
+}
+
+.review-list {
+	padding: 0 48px;
+	margin: 24px 0;
+}
 
 /* ----------------------------- Responsive Media Styles -----------------------------*/
 

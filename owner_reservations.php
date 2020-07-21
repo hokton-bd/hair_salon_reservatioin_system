@@ -7,6 +7,9 @@
     } else if($_SESSION['login_id'] != null && $_SESSION['status'] == "U") {
         header("Location: userDashboard.php");
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
 $minus_three = date('Y-m-d', strtotime('-3days'));
 $minus_two = date('Y-m-d', strtotime('-2days'));
 $minus_one = date('Y-m-d', strtotime('-1days'));

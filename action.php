@@ -15,7 +15,7 @@
             $create->register();
         } else {
             $_SESSION['message'] = "This email is already registered.";
-            header("Location: register.php");
+            echo "<script>window.location = 'register.php'</script>";
         }
 
     } else if(isset($_POST['login'])) { //login
@@ -27,22 +27,22 @@
                 
                 switch($_SESSION['status']) {
                     case "A":
-                        header("Location: adminDashboard.php");
+                       echo "<script>window.location = 'adminDashboard.php'</script>";
                     break;
                     
                     case "O":
-                        header("Location: ownerDashboard.php");
+                        echo "<script>window.location = 'ownerDashboard.php'</script>";
                     break;
                     
                     case "S":
-                        header("Location: staffDashboard.php");
+                        echo "<script>window.location = 'staffDashboard.php'</script>";
                     break;
                     
                     case "U":
-                        if($_SESSION['date'] == null) {
-                            header("Location: userDashboard.php");
+                        if(!(isset($_SESSION['date'])) && empty($_SESSION['date'])) {
+                            echo "<script>window.location = 'userDashboard.php'</script>";
                         } else {
-                            header("Location: makeReservation.php");
+                            echo "<script>window.location = 'makeReservation.php'</script>";
                         }
                     break;
                 }
@@ -72,7 +72,17 @@
             echo "<script>window.location = 'addStaff.php'</script>";
         }
 
+    } else if(isset($_POST['add_owner'])) {
+
+        if($retrieve->checkMultipleAccount() == true) {
+            $create->addOwner();
+        } else {
+            $_SESSION['message'] = "This account email is already used";
+            echo "<script>window.location = 'addStaff.php'</script>";
+        }
+
     } else if(isset($_POST['update_service'])) { //update service
+
         $service_id = $_POST['service_id'];
         
         if($retrieve->checkMultipleService() == true) {
@@ -109,6 +119,24 @@
 
             $_SESSION['message'] = "This staff is already existed or this email is already registered";
             header("Location: updateStaff.php?id=$staff_id");
+
+        }
+
+    } else if(isset($_POST['update_owner'])) {
+
+        $staff_id = $_POST['staff_id'];
+        list(, , , , , , $login_id, , ) = $retrieve->getEachStaff($staff_id);
+        $name_flag = $retrieve->checkUpdateStaffName($staff_id);
+        $email_flag = $retrieve->checkUpdateEmail($login_id);
+
+        if($update->updateOwner($staff_id, $name_flag, $email_flag) == true) {
+
+                header("Location: allStaffs.php");
+
+        } else {
+
+            $_SESSION['message'] = "This owner is already existed or this email is already registered";
+            header("Location: updateOwner.php?id=$staff_id");
 
         }
 
@@ -231,6 +259,12 @@
             echo "FAIL";
         }
 
+    } else if(isset($_POST['review'])) {
+
+        if($create->review()) {
+            echo "<script>window.location = 'userDashboard.php'</script>";
+        }
+
     } else if($_GET['actiontype'] == "change") { //change service status
 
         $service_id = $_GET['id'];
@@ -337,7 +371,24 @@
             }
         } 
     } else if($_GET['actiontype'] == "delete_message") {
+        
         $_SESSION['message'] = "";
+
+    } else if($_GET['actiontype'] == "deactivate_company") {
+
+        if($update->deactivateCompany() == true) {
+            $_SESSION['admin_status'] = "D";
+        }
+        header("Location: adminDashboard.php");
+
+    } else if($_GET['actiontype'] == "activate_company") {
+        
+        if($update->activateCompany() == true) {
+            $_SESSION['admin_status'] = "A";
+        }
+
+        header("Location: adminDashboard.php");
+
     }
 
 

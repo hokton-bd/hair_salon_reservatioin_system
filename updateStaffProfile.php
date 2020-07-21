@@ -4,8 +4,11 @@
         header("Location: login.php");
 
     }
-    if($_SESSION['status'] != "S") {
+    if($_SESSION['status'] == "U") {
         header("Location: index.php");    
+    }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
     }
     list($staff_id, $staff_name, $gender, $picture, $position, $staff_status, $login_id, $email, $pass) = $retrieve->getEachStaff($_GET['id']);
 ?>
@@ -17,7 +20,7 @@
     <div class="container">
 
         <a href="staffDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>
-        <h3 class="text-center text-white mb-5 d-inline-block ml-5">Update Staff</h3>
+        <h3 class="text-center text-white mb-5">Update Staff</h3>
 
         <form method="post" action="action.php" class="row mx-auto" enctype="multipart/form-data">
             <input type="hidden" name="staff_id" value="<?= $_GET['id']?>">

@@ -7,6 +7,9 @@
     if($_SESSION['status'] != "O") {
         header("Location: index.php");    
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
     $user_id = $_GET['id'];
     list($name, $birthday, $gender, $contact_number, $user_status, $email, $login_id, $pass) = $retrieve->getEachUser($user_id);
     list($d_count, $d_reservations) = $retrieve->getTotalReservations($user_id);

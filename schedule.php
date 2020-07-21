@@ -16,6 +16,9 @@
             $update->changeShiftStatus($schedule['schedule_id']);
         }
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
  ?>
  <html>
  <body>

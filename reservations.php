@@ -7,6 +7,9 @@
     } else if($_SESSION['login_id'] != null && $_SESSION['status'] == "U") {
         header("Location: userDashboard.php");
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
  ?>
     <!-- Hero Area Section Begin -->
     <?php include 'heroArea.php' ; ?>

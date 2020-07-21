@@ -127,6 +127,61 @@
 
         } //end of update Staff
 
+        public function updateOwner($staff_id, $name_flag, $email_flag) {
+
+            if($name_flag == 0 && $email_flag == 0) { // not existed name and email
+
+                $gender = $_POST['gender'];
+                $position = $_POST['position'];
+                $pass = md5($_POST['pass']);
+
+                if(isset($_FILES['staff_picture']['name']) && $_FILES['staff_picture']['name'] != "" ) { //staff picture change
+                
+               
+                    $picture = $_FILES['staff_picture']['name'];
+
+                    $target_dir = "img/owner/";
+                    $target_file = $target_dir.basename($picture);
+                    
+                    $sql_u = "UPDATE staff_owner INNER JOIN login ON staff_owner.login_id = login.login_id
+                            SET 
+              
+                                staff_owner.gender = '$gender',
+                                staff_owner.position = '$position',
+                                staff_owner.picture = '$picture',
+                                login.password = '$pass'
+                
+                            WHERE staff_id = '$staff_id'";
+                    move_uploaded_file($_FILES['staff_picture']['tmp_name'], $target_file);
+
+                } else  {
+                
+                    $sql_u = "UPDATE staff_owner INNER JOIN login ON staff_owner.login_id = login.login_id
+                            SET 
+            
+                                staff_owner.gender = '$gender',
+                                staff_owner.position = '$position',
+                                login.password = '$pass'
+                
+                            WHERE staff_id = '$staff_id'";
+                }
+            
+                if($this->conn->query($sql_u)) {
+                    return true;
+                } else {
+                    echo $this->conn->error;
+                }
+
+            } else {
+
+                return false;
+
+            }
+
+            
+
+        } //end of update Staff
+
         public function changeUserStatus($user_id, $user_status) {
 
             if($user_status == "A") {
@@ -270,6 +325,51 @@
             $sql_u = "UPDATE users SET visited_amount = '$visited_amount' WHERE user_id = '$user_id'";
 
             
+        }
+
+        public function activateCompany() {
+            $sql_1 = "UPDATE coupons SET admin_status = 'A'";
+            $sql_2 = "UPDATE login SET admin_status = 'A'";
+            $sql_3 = "UPDATE reservations SET admin_status = 'A'";
+            $sql_4 = "UPDATE schedule SET admin_status = 'A'";
+            $sql_5 = "UPDATE services SET admin_status = 'A'";
+            $sql_6 = "UPDATE staff_owner SET admin_status = 'A'";
+            $sql_7 = "UPDATE users SET admin_status = 'A'";
+            $sql_8 = "UPDATE user_coupons SET admin_status = 'A'";
+
+            $this->conn->query($sql_1);
+            $this->conn->query($sql_2);
+            $this->conn->query($sql_3);
+            $this->conn->query($sql_4);
+            $this->conn->query($sql_5);
+            $this->conn->query($sql_6);
+            $this->conn->query($sql_7);
+            $this->conn->query($sql_8);
+
+            return true;
+        }
+       
+
+        public function deactivateCompany() {
+            $sql_1 = "UPDATE coupons SET admin_status = 'D'";
+            $sql_2 = "UPDATE login SET admin_status = 'D'";
+            $sql_3 = "UPDATE reservations SET admin_status = 'D'";
+            $sql_4 = "UPDATE schedule SET admin_status = 'D'";
+            $sql_5 = "UPDATE services SET admin_status = 'D'";
+            $sql_6 = "UPDATE staff_owner SET admin_status = 'D'";
+            $sql_7 = "UPDATE users SET admin_status = 'D'";
+            $sql_8 = "UPDATE user_coupons SET admin_status = 'D'";
+
+            $this->conn->query($sql_1);
+            $this->conn->query($sql_2);
+            $this->conn->query($sql_3);
+            $this->conn->query($sql_4);
+            $this->conn->query($sql_5);
+            $this->conn->query($sql_6);
+            $this->conn->query($sql_7);
+            $this->conn->query($sql_8);
+
+            return true;
         }
        
     }

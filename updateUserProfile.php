@@ -7,6 +7,9 @@
     if($_SESSION['status'] != "U") {
         header("Location: index.php");    
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
 
     $user_id = $retrieve->getUserIdByLoginId($_SESSION['login_id']);
 

@@ -8,6 +8,10 @@
         header("Location: index.php");    
     }
 
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
+
     list($service_id, $service_name, $price, $picture, $service_description, $service_status) = $retrieve->getEachService($_SESSION['service']);
 ?>
     <!-- Hero Area Section Begin -->

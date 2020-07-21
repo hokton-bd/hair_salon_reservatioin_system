@@ -8,6 +8,9 @@
     if($_SESSION['status'] != "O") {
         header("Location: index.php");    
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
 ?>
     <?php include 'heroArea.php' ; ?>
     <?php if($_SESSION['message'] != null): ?>

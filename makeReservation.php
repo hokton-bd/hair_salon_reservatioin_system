@@ -7,6 +7,9 @@
     if($_SESSION['status'] != "U") {
         header("Location: index.php");    
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
     $rows = $retrieve->getAllServices();
     $rows_st = $retrieve->getAllStaffs();
     $user_id = $retrieve->getUserIdByLoginId($_SESSION['login_id']);
@@ -28,9 +31,9 @@
                     <?php foreach($rows as $row) : ?>
                     <?php if($row['service_status'] == "A") : ?>
                     <?php if($_SESSION['service'] == $row['service_id']) : ?>
-                        <option class="text-uppercase" value="<?= $row['service_id']; ?>" selected><?= $row['service_name']; ?></option>
+                        <option class="text-uppercase" value="<?= $row['service_id']; ?>" selected><?= $row['service_name']; ?> / <span style="font-size: 12px;">Rate: <?= $retrieve->calcServiceRate($row['service_id']) ;?></span></option>
                     <?php else : ?>
-                        <option class="text-uppercase" value="<?= $row['service_id']; ?>"><?= $row['service_name']; ?></option>
+                        <option class="text-uppercase" value="<?= $row['service_id']; ?>"><?= $row['service_name']; ?> / <span style="font-size: 12px;">Rate: <?= $retrieve->calcServiceRate($row['service_id']) ;?></span></option>
                     <?php endif ; ?>
                     <?php endif ; ?>
                     <?php endforeach ; ?>
@@ -39,8 +42,8 @@
 
             </div>
 
+            <h5 class="text-center text-light col-12 mb-2">Choose Staff</h5>
             <div id="staff-select" class="row mx-auto mb-4">
-                <h5 class="text-center text-light col-12 mb-2">Choose Staff</h5>
                 <?php foreach($retrieve->getServiceStaff($_SESSION['service']) as $staff) : ?>
                 <?php if($retrieve->getDateShift($_SESSION['date'], $staff['staff_id']) == true) : ?>
                 <label for="<?= $staff['staff_id']; ?>" class="col-4">
@@ -48,7 +51,7 @@
                         <img class="staff-img" src="img/staffs/<?= $staff['picture']?>" alt="">
                     </div>
                     <input type="radio" class="staff-radio"  name="staff" value="<?= $staff['staff_id']?>" id="<?= $staff['staff_id']?>" required>
-                    <span class="staff-name ml-3 text-light text-center mx-auto"><?= $staff['name']; ?></span>
+                    <span class="staff-name ml-3 text-light text-center mx-auto"><?= $staff['name']; ?> Rate : <span class="text-warning"><?= $retrieve->calcStaffRate($staff['staff_id']) ;?></span></span>
                 </label>
                 <?php endif ; ?>
                 <?php endforeach ; ?>

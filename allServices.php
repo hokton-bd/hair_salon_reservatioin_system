@@ -9,6 +9,9 @@
     if($_SESSION['status'] != "O") {
         header("Location: index.php");    
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
     $rows = $retrieve->getAllServices();
  ?>
  <html>
@@ -38,6 +41,13 @@
                         <div class="card-body">
                             <h5 class="card-title text-light text-center"><?= $row['service_name'] ; ?></h5>
                             <p class="card-text text-center"><?= $row['service_description']; ?></p>
+                            <p class="card-text text-center">Rate: 
+                                <?php if($retrieve->calcServiceRate($row['service_id']) != false) : ?>
+                                    <a href="service_reviews.php?id=<?= $row['service_id']; ?>" class="text-warning"><?= $retrieve->calcServiceRate($row['service_id']) ;?></a>
+                                <?php else : ?>
+                                    <span class="text-light">No Rate</span>
+                                <?php endif; ?>
+                            </p>
                         </div><!--card body-->
 
                         <div class="card-footer text-center">

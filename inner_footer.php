@@ -57,6 +57,14 @@
             $('.coupons-menu').toggle();
         });
 
+        //adminDashboard
+        $('.toggler-owner').on('click', function() {
+            $('.owner-menu').toggle();
+        });
+        $('.toggler-company').on('click', function() {
+            $('.company-menu').toggle();
+        });
+
         //choose staff
         $(document).ready(function() {
             $("#service-list").change(function() {
@@ -172,8 +180,25 @@
 
             });
 
-            
+            function readURL(input, display) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                    $(display).attr('src', e.target.result);
+                    }
+                    
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
+            }
 
+                $('#select-staff-img').change(function() {
+                readURL(this, '#display-staff-img');
+
+                });
+                $('#select-service-img').change(function() {
+                readURL(this, '#display-service-img');
+                });
         });
 
         

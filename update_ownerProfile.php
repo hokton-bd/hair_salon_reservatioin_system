@@ -4,7 +4,7 @@
         header("Location: login.php");
 
     }
-    if($_SESSION['status'] != "O") {
+    if($_SESSION['status'] == "U") {
         header("Location: index.php");    
     }
     if($_SESSION['admin_status'] == "D") {
@@ -15,13 +15,13 @@
     <!-- Hero Area Section Begin -->
     <?php include 'heroArea.php' ; ?>
     <!-- Hero Area Section End -->
+    <?php $retrieve->displayMessage(); ?>
     <section class="services-section spad pt-5">
     <div class="container">
 
-        <a href="allStaffs.php" class="btn btn-outline-light">Back to Staffs</a>
-        <h3 class="text-center text-white mb-5 d-inline-block ml-5">Update Staff</h3>
+        <a href="ownerDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>
+        <h3 class="text-center text-white mb-5">Update Profile</h3>
 
-        <?php $retrieve->displayMessage() ; ?>
         <form method="post" action="action.php" class="row mx-auto" enctype="multipart/form-data">
             <input type="hidden" name="staff_id" value="<?= $_GET['id']?>">
 
@@ -77,7 +77,7 @@
 
                 <div class="input-group mb-3 mr-0">
                     <div class="staff-img-box mb-2">
-                        <img src="img/staffs/<?= $picture?>" alt="" id="display-staff-img" class="staff-img">
+                        <img id="display-staff-img" src="img/owner/<?= $picture?>" alt="" class="staff-img">
                     </div>
                     <div class="custom-file mr-0">
                         <input id="select-staff-img" type="file" name="staff_picture" class="custom-file-input mr-0" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
@@ -87,11 +87,44 @@
 
             </div>
 
-            <input class="form-control btn form-btn col-3 mx-auto mt-5" type="submit" name="update_staff" value="Update">
+            <div class="row col-12">
+                <input class="form-control btn form-btn col-4 mx-auto mt-5" type="submit" name="update_staff" value="Update">
+
+                <button type="button" class="btn btn-warning text-white mx-auto mt-5 col-4" data-toggle="modal" data-target="#staff_<?= $staff_id; ?>" style="max-height: 35px;">
+                    De/Activate
+                </button>
+            </div>
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="staff_<?= $staff_id?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Change own status</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                        </div><!--modal header-->
+                                        <div class="modal-body text-dark">
+                                            <?php if($staff_status == "A") : ?>
+                                                You are now <strong>Activate</strong><br>
+                                                Do you change to <strong>Deactivate</strong>?
+                                            <?php else: ?>
+                                                You are now <strong>Deactivate</strong><br>
+                                                Do you change to <strong>Activate</strong>?
+                                            <?php endif ; ?>
+                                        </div><!--modal body-->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <a href="action.php?actiontype=changeOwnStatus&id=<?= $staff_id?>" type="button" class="btn btn-info">Yes</a>
+                                        </div><!--modal footer-->
+                                    </div><!--modal content-->
+                                </div><!--modal dialog-->
+                            </div><!--modal-->
+
         </form>   
 
     </div><!--end container-->
     </section>
     <!-- Room Section End -->
-
 <?php require_once 'inner_footer.php' ; ?>

@@ -4,7 +4,7 @@
         header("Location: login.php");
 
     }
-    if($_SESSION['status'] != "O") {
+    if($_SESSION['status'] != "A") {
         header("Location: index.php");    
     }
     if($_SESSION['admin_status'] == "D") {
@@ -18,8 +18,8 @@
     <section class="services-section spad pt-5">
     <div class="container">
 
-        <a href="allStaffs.php" class="btn btn-outline-light">Back to Staffs</a>
-        <h3 class="text-center text-white mb-5 d-inline-block ml-5">Update Staff</h3>
+        <a href="allStaffs.php" class="btn btn-outline-light">Back</a>
+        <h3 class="text-center text-white mb-5 ml-5">Update Owner</h3>
 
         <?php $retrieve->displayMessage() ; ?>
         <form method="post" action="action.php" class="row mx-auto" enctype="multipart/form-data">
@@ -77,21 +77,20 @@
 
                 <div class="input-group mb-3 mr-0">
                     <div class="staff-img-box mb-2">
-                        <img src="img/staffs/<?= $picture?>" alt="" id="display-staff-img" class="staff-img">
+                        <img src="img/owner/<?= $picture?>" alt="" class="staff-img">
                     </div>
                     <div class="custom-file mr-0">
-                        <input id="select-staff-img" type="file" name="staff_picture" class="custom-file-input mr-0" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                        <label class="custom-file-label mr-0" for="inputGroupFile01">Choose file</label>
+                        <input type="file"  name="staff_picture" class="custom-file-input mr-0" id="select-img" aria-describedby="inputGroupFileAddon01">
+                        <label class="custom-file-label mr-0" for="select-img">Choose file</label>
                     </div>
                 </div>
 
             </div>
 
-            <input class="form-control btn form-btn col-3 mx-auto mt-5" type="submit" name="update_staff" value="Update">
+            <input class="form-control btn form-btn col-3 mx-auto mt-5" type="submit" name="update_owner" value="Update">
         </form>   
 
     </div><!--end container-->
     </section>
     <!-- Room Section End -->
-
 <?php require_once 'inner_footer.php' ; ?>

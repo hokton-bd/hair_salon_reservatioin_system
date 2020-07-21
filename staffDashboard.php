@@ -7,6 +7,9 @@
     } else if($_SESSION['login_id'] != null && $_SESSION['status'] != "S") {
         header("Location: index.php");    
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
 
     $staff_id = $retrieve->getStaffId($_SESSION['login_id']);
     $shifts = $retrieve->getStaffShift($staff_id);

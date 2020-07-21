@@ -6,7 +6,10 @@
     }
     if($_SESSION['status'] != "O") {
         header("Location: index.php");    
-    }   
+    }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
     $rows = $retrieve->getAllUsers();
  ?>
  <html>
@@ -29,28 +32,27 @@
                     <th>CONTACT</th>
                     <th>BIRTHDAY</th>
                     <th>VISITED</th>
-                    <th>STATUS</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($rows as $row) : ?>
                     <tr>
-                        <td style="font-size: 14px;"><a class="text-dark" href="customer_detail.php?id=<?= $row['user_id']?>"><?= $row['user_id'] ;?></a></td>
-                        <td style="font-size: 14px;"><a class="text-dark" href="customer_detail.php?id=<?= $row['user_id']?>"><?= $row['name']; ?></a></td>
+                        <td style="font-size: 14px; position: relative;">
+                            <?php if($row['user_status'] == "A") : ?>
+                                <span class="badge badge-primary status-badge">A</span>
+                            <?php else : ?>
+                                <span class="badge badge-danger status-badge">D</span>
+                            <?php endif ; ?>
+                            <a class="text-dark" href="customer_detail.php?id=<?= $row['user_id']?>"><?= $row['user_id'] ;?></a>
+                        </td>
+                        <td style="font-size: 14px;"><a class="text-dark" href="customer_detail.php?id=<?= $row['user_id']?>"><?= $row['name']; ?></a>
+                        </td>
                         <td style="font-size: 14px;"><?= $row['gender']; ?></td>
                         <td style="font-size: 14px;"><?= $row['email']; ?></td>
                         <td style="font-size: 14px;"><?= $row['contact_number']; ?></td>
                         <td style="font-size: 14px;"><?= $row['birthday']; ?></td>
                         <td style="font-size: 14px;"><?= $retrieve->getDoneReservations($row['user_id']); ?></td>
-
-                        <td style="font-size: 14px;">
-                        <?php if($row['user_status'] == "A") : ?>
-                            <span class="badge badge-primary status-badge">A</span>
-                        <?php else : ?>
-                            <span class="badge badge-danger status-badge">D</span>
-                        <?php endif ; ?>
-                        </td>
                         <td>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#user_<?= $row['user_id']?>">

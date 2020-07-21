@@ -4,9 +4,12 @@
         header("Location: login.php");
 
     }
-    if($_SESSION['status'] != "O") {
-        header("Location: index.php");    
-    }   
+    if($_SESSION['status'] == "S" || $_SESSION['status'] == "U") {
+        header("Location: index.php");
+    }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
     $date = date('Y-m-d');
     $services = $retrieve->getAllServices();
  ?>
@@ -17,7 +20,14 @@
     <!-- Hero Area Section End -->
     <section class="services-section spad pt-5">
     <div class="container">
-    <a href="ownerDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>
+
+    <?php if($_SESSION['status'] == "A") : ?>
+        <a href="adminDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>
+    <?php endif; ?>
+    <?php if($_SESSION['status'] == "O") : ?>
+        <a href="ownerDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>
+    <?php endif; ?>
+
         <h3 class="text-center text-white mb-5">Reports</h3>
 
             <div class="row mb-4">
@@ -44,7 +54,7 @@
                             <tr>
                             <?php foreach($services as $service) : ?>
                             <?php if($service['service_status'] == "A") : ?>
-                                <th><?= $service['service_name']; ?></th>
+                                <th class="text-uppercase"><?= $service['service_name']; ?></th>
                             <?php endif ; ?>
                             <?php endforeach ; ?>
                             </tr>

@@ -158,6 +158,24 @@
 
         } //end of getAllStaffs
 
+        public function getAllOwners() {
+
+            $sql_r = "SELECT * FROM login INNER JOIN staff_owner ON login.login_id = staff_owner.login_id WHERE login.status = 'O'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $rows = array();
+
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+
+                return $rows;
+            }
+
+
+        } //end of getAllStaffs
+
         public function getEachStaff($staff_id) {
 
             $sql_r = "SELECT * FROM login INNER JOIN staff_owner ON login.login_id = staff_owner.login_id WHERE staff_owner.staff_id= '$staff_id'";
@@ -196,7 +214,7 @@
 
         } // end of getStaffId
 
-        public function checkUpdaaffName($staff_id) {
+        public function checkUpdateStaffName($staff_id) {
             $staff_name = $_POST['staff_name'];
             $new_staff_name = $_POST['new_staff_name'];
 
@@ -591,6 +609,13 @@
                 $status = $row['status'];
             }
             switch($status) {
+                case "A":
+                    $sql_r = "SELECT * FROM staff_owner WHERE login_id = '$login_id'";
+                    $result = $this->conn->query($sql_r);
+                    if($result->num_rows == 1) {
+                        $row = $result->fetch_assoc();
+                        return $row['name'];
+                    }
                 case "O":
                     $sql_r = "SELECT * FROM staff_owner WHERE login_id = '$login_id'";
                     $result = $this->conn->query($sql_r);
@@ -981,6 +1006,92 @@
             } else {
                 return 0;
             }
+        }
+
+        public function checkReviewed($reservation_id) {
+            $sql_r = "SELECT * FROM reviews WHERE reservation_id = '$reservation_id'";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public function calcStaffRate($staff_id) {
+            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id WHERE reservations.staff_id = '$staff_id'";
+
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $ave = 0;
+
+                while($row = $result->fetch_assoc()) {
+                    $ave = $ave + $row['staff_rating'] / $result->num_rows;
+                }
+
+                return number_format($ave, 1);
+            } else {
+                return "No Rate";
+            }
+
+        }
+
+        public function calcServiceRate($service_id) {
+            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id WHERE reservations.service_id = '$service_id'";
+
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                $ave = 0;
+
+                while($row = $result->fetch_assoc()) {
+                    $ave = $ave + $row['service_rating'] / $result->num_rows;
+                }
+
+                return number_format($ave, 1);
+            } else {
+                return false;
+            }
+
+        }
+
+        public function getStaffReview($staff_id) {
+            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id WHERE reservations.staff_id = '$staff_id'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+
+                return $rows;
+
+            } else {
+                return false;
+            }
+
+        }
+
+        public function getServiceReview($service_id) {
+            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id WHERE reservations.service_id = '$service_id'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+
+                $rows = array();
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+
+                return $rows;
+
+            } else {
+                return false;
+            }
+
         }
 
     } //end of class

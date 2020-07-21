@@ -59,16 +59,10 @@
                             <ul class="drop-menu">
                             <?php foreach($retrieve->getAllServices() as $row) : ?>
                             <?php if($row['service_status'] == "A") : ?>
-                                <li><a href="services.php"><?= $row['service_name']; ?></a></li>
+                                <li><a href="services.php" class="text-uppercase"><?= $row['service_name']; ?></a></li>
                             <?php endif ; ?>
                             <?php endforeach ; ?>
-                                <!-- <li><a href="services.php">Cut</a></li>
-                                <li><a href="services.php">Color</a></li>
-                                <li><a href="services.php">Perm</a></li>
-                                <li><a href="services.php">Rebond</a></li>
-                                <li><a href="services.php">Shampoo & Blow</a></li>
-                                <li><a href="services.php">Treatment</a></li>
-                                <li><a href="services.php">Head Supa</a></li> -->
+                                
                             </ul>
                         </li>
                         <li><a href="rooms.php">Staff</a></li><!---change staff page-->

@@ -7,6 +7,9 @@
     if($_SESSION['status'] != "O") {
         header("Location: index.php");    
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
     $coupons = $retrieve->getAllCoupons();
  ;?>
  <html>

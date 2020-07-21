@@ -7,6 +7,9 @@
     if($_SESSION['status'] != "O") {
         header("Location: index.php");    
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
     list($service_id, $service_name, $price, $picture, $service_description, $service_status) = $retrieve->getEachService($_GET['id']);
 ?>
     <!-- Hero Area Section Begin -->
@@ -16,7 +19,7 @@
     <div class="container">
 
         <a href="ownerDashboard.php" class="btn btn-outline-light">Back to Services</a>
-        <h3 class="text-center text-white mb-5">Update service</h3>
+        <h3 class="text-center text-white mb-5">Update Service</h3>
 
         <?php $retrieve->displayMessage() ; ?>
         
@@ -25,7 +28,7 @@
             <div class="row col-12 px-0 ml-1">
 
                 <div class="col-7">
-                    <input class="form-control mb-2" type="text" name="service_name" placeholder="Name" required value="<?= $service_name?>">
+                    <input class="form-control mb-2 text-uppercase" type="text" name="service_name" placeholder="Name" required value="<?= $service_name?>">
 
                     <div class="input-group mb-2 p-0 mr-5">
                         <input class="form-control" type="number" name="price" placeholder="Price" required value="<?= $price?>">
@@ -42,12 +45,12 @@
 
                 <div class="col-5">
                     <div class="service-img-box mb-3">
-                        <img src="img/services/<?= $picture?>" alt="">
+                        <img id="display-service-img" src="img/services/<?= $picture?>" alt="">
                     </div>
                     <div class="input-group mb-2 p-0">
                         <div class="custom-file mr-0">
-                            <input type="file" name="picture" class="custom-file-input mr-0" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                            <label class="custom-file-label mr-0" for="inputGroupFile01">Choose file</label>
+                            <input type="file" name="picture" class="custom-file-input mr-0" id="select-service-img" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label mr-0" for="select-service-img">Choose file</label>
                         </div>
                     </div>
                 </div><!--end col-5 -->

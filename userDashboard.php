@@ -7,6 +7,9 @@
     if($_SESSION['status'] != "U") {
         header("Location: login.php");
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
 
     $user_id = $retrieve->getUserIdByLoginId($_SESSION['login_id']);
     list($name, $birthday, $gender, $contact_number, $user_status, $email, $login_id) = $retrieve->getEachUser($user_id);
@@ -103,6 +106,79 @@
                             <td><?= $retrieve->getServiceNameById($row_h['service_id']); ?></td>
                             <td><?= $retrieve->getStaffNameById($row_h['staff_id']); ?></td>
                             <td><?= $retrieve->getServicePriceById($row_h['service_id']); ?> PHP</td>
+                            <td>
+                                <?php if($retrieve->checkReviewed($row_h['reservation_id']) == true) : ?>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#review_<?= $row_h['reservation_id']; ?>">
+                                  Review
+                                </button>
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="review_<?= $row_h['reservation_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Rate this service and staff</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                            </div>
+                                            <form method="post" action="action.php">
+                                                <input type="hidden" name="reservation_id" value="<?= $row_h['reservation_id']; ?>">
+                                                <div class="modal-body">
+                                                    <p class="text-dark font-weight-bold">Service</p>
+                                                    <div class="row review-list">
+                                                        <label class="review-item" for="service1"><span class="review_num">1</span>
+                                                            <input required type="radio" name="rate_service" value="1" id="service1">
+                                                        </label>
+                                                        <label class="review-item" for="service2"><span class="review_num">2</span>
+                                                            <input required type="radio" name="rate_service" value="2" id="service2">
+                                                        </label>
+                                                        <label class="review-item" for="service3"><span class="review_num">3</span>
+                                                            <input required type="radio" name="rate_service" value="3" id="service3">
+                                                        </label>
+                                                        <label class="review-item" for="service4"><span class="review_num">4</span>
+                                                            <input required type="radio" name="rate_service" value="4" id="service4">
+                                                        </label>
+                                                        <label class="review-item" for="service5"><span class="review_num">5</span>
+                                                            <input required type="radio" name="rate_service" value="5" id="service5">
+                                                        </label>
+                                                    </div>
+                                                
+                                                    <p class="text-dark font-weight-bold">Staff</p>
+                                                    <div class="row review-list">
+                                                        <label class="review-item" for="staff1"><span class="review_num">1</span>
+                                                            <input required type="radio" name="rate_staff" value="1" id="staff1">
+                                                        </label>
+                                                        <label class="review-item" for="staff2"><span class="review_num">2</span>
+                                                            <input required type="radio" name="rate_staff" value="2" id="staff2">
+                                                        </label>
+                                                        <label class="review-item" for="staff3"><span class="review_num">3</span>
+                                                            <input required type="radio" name="rate_staff" value="3" id="staff3">
+                                                        </label>
+                                                        <label class="review-item" for="staff4"><span class="review_num">4</span>
+                                                            <input required type="radio" name="rate_staff" value="4" id="staff4">
+                                                        </label>
+                                                        <label class="review-item" for="staff5"><span class="review_num">5</span>
+                                                            <input required type="radio" name="rate_staff" value="5" id="staff5">
+                                                        </label>
+                                                    </div>
+
+                                                    <p class="text-dark font-weight-bold">Comment</p>
+                                                    <textarea name="comment" id="" cols="30" rows="10" placeholder="Comment" style="resize: none;" class="form-control"></textarea>
+                                                    
+                                                
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="button" style="border: none;"><input type="submit" name="review" value="Save" class="form-control btn-primary btn"></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach ; ?>
                 </thead>

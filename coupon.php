@@ -8,6 +8,9 @@
     if($_SESSION['status'] != "U") {
         header("Location: login.php");
     }
+    if($_SESSION['admin_status'] == "D") {
+        header("Location: login.php");
+    }
 
     $user_id = $retrieve->getUserIdByLoginId($_SESSION['login_id']);
     list($name, $birthday, $gender, $contact_number, $user_status, $email, $login_id) = $retrieve->getEachUser($user_id);
