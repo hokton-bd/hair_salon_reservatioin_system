@@ -142,7 +142,7 @@
 
         public function getAllStaffs() {
 
-            $sql_r = "SELECT * FROM login INNER JOIN staff_owner ON login.login_id = staff_owner.login_id WHERE login.status = 'S'";
+            $sql_r = "SELECT * FROM login INNER JOIN staff_owner ON login.login_id = staff_owner.login_id WHERE login.status = 'S' ORDER BY staff_status ASC";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -285,7 +285,6 @@
                 return $rows;
             }
 
-
         } //end of getAllUsers
 
         public function getEachUSer($user_id) {
@@ -395,6 +394,8 @@
                     }
                 }
 
+            } else {
+                return false;
             }
 
         } // end of getComingReservations
@@ -455,6 +456,8 @@
                     $rows[] = $row;
                 }
                 return $rows;
+            } else {
+                return false;
             }
 
         } //end of getUserHistoryReservation
@@ -643,7 +646,7 @@
 
         public function getAllCoupons() {
 
-            $sql_r = "SELECT coupon_name, coupon_value, expiration, description, coupon_status, COUNT(*) FROM coupons WHERE coupon_status = 'A' GROUP BY coupon_name";
+            $sql_r = "SELECT coupon_id, coupon_name, coupon_value, expiration, description, coupon_status, COUNT(*) FROM coupons WHERE coupon_status = 'A' GROUP BY coupon_name";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -1057,7 +1060,7 @@
         }
 
         public function getStaffReview($staff_id) {
-            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id WHERE reservations.staff_id = '$staff_id'";
+            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id WHERE reservations.staff_id = '$staff_id' ORDER BY reservations.reservation_date DESC";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -1076,7 +1079,7 @@
         }
 
         public function getServiceReview($service_id) {
-            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id WHERE reservations.service_id = '$service_id'";
+            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id WHERE reservations.service_id = '$service_id' ORDER BY reservations.reservation_date DESC";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -1092,6 +1095,160 @@
                 return false;
             }
 
+        }
+
+        public function getEachReservationServiceRate($reservation_id) {
+            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id  WHERE reviews.reservation_id = '$reservation_id'";
+
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                return $row['service_rating'];
+            } else {
+                return "No Rate";
+            }
+        }
+
+        public function getEachReservationStaffRate($reservation_id) {
+            $sql_r = "SELECT * FROM reviews INNER JOIN reservations ON reviews.reservation_id = reservations.reservation_id  WHERE reviews.reservation_id = '$reservation_id'";
+
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                return $row['staff_rating'];
+            } else {
+                return "No Rate";
+            }
+        }
+
+        public function getReviewByReservationId($reservation_id) {
+            $sql_r = "SELECT * FROM reservations INNER JOIN reviews ON reservations.reservation_id = reviews.reservation_id WHERE reservations.reservation_id = '$reservation_id'";
+
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows == 1) {
+                $rows = array();
+
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+
+                return $rows;
+                
+            } else {
+                false;
+            }
+        }
+
+        public function displayStaffImage($staff_id) {
+            $sql_r = "SELECT * FROM staff_owner WHERE staff_id = '$staff_id'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                return $row['picture'];
+            }
+        }
+
+        public function calcTotalServiceRate() {
+            $sql_r = "SELECT * FROM reviews";
+            $result = $this->conn->query($sql_r);
+            $total = 0;
+
+            if($result->num_rows > 0) {
+
+                while($row = $result->fetch_assoc()) {
+                    $total = $total + $row['service_rating'];
+                }
+                $total_ave = $total / $result->num_rows;
+                return $total_ave;
+            } else {
+                return $total;
+            }
+        }
+
+        public function calcTotalStaffRate() {
+            $sql_r = "SELECT * FROM reviews";
+            $result = $this->conn->query($sql_r);
+            $total = 0;
+
+            if($result->num_rows > 0) {
+
+                while($row = $result->fetch_assoc()) {
+                    $total = $total + $row['staff_rating'];
+                }
+                $total_ave = $total / $result->num_rows;
+                return $total_ave;
+            } else {
+                return $total;
+            }
+        }
+
+        public function calcOverallRate() {
+            $sql_r = "SELECT * FROM reviews";
+            $result = $this->conn->query($sql_r);
+            $total = 0;
+
+            if($result->num_rows > 0) {
+
+                while($row = $result->fetch_assoc()) {
+                    $total = $total + $row['staff_rating'];
+                    $total = $total + $row['service_rating'];
+                }
+                $total_ave = $total / ($result->num_rows * 2);
+                return $total_ave;
+            } else {
+                return $total;
+            }
+        }
+
+        public function getActiveUsers() {
+            $sql_r = "SELECT * FROM users WHERE user_status = 'A'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
+        }
+
+        public function getNonactiveUsers() {
+            $sql_r = "SELECT * FROM users WHERE user_status = 'D'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows > 0) {
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
+        }
+
+        public function getTotalUsers() {
+            $sql_r = "SELECT * FROM users";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
+        }
+
+        public function calcYearIncome($year) {
+            $sql_r = "SELECT * FROM reservations WHERE YEAR(reservation_date) = '$year' AND reservation_status = 'D'";
+            $result = $this->conn->query($sql_r);
+
+            $total = 0;
+
+            if($result->num_rows > 0) {
+
+                while($row = $result->fetch_assoc()) {
+                    $total = $total + $row['payment'];
+                }
+                return $total;
+            } else {
+                return $total;
+            }
         }
 
     } //end of class

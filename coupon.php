@@ -30,7 +30,7 @@
     <div class="container">
 
         <a href="userDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>
-        <h2 class="text-center text-white my-5">Welcome <a href="updateUserProfile.php?id=<?= $user_id; ?>" class="text-primary"><?= $name; ?></a></h2>
+        <h3 class="text-center text-white mb-5">Get Coupons</h3>
 
         <div class="row">
         <?php if($coupons == false) : ?>
@@ -38,7 +38,7 @@
         <?php else : ?>
             <?php foreach($coupons as $row) : ?>
             <?php if($row['coupon_status'] == "A") : ?>
-        <div class="card col-4 mr-3">
+        <div class="card col-3 mx-auto">
             <div class="card-body">
                 <h5 class="card-title text-center"><?= $row['coupon_name'] ; ?></h5>
                 <h6 class="card-title text-center"><?= $row['coupon_value']; ?> % OFF</h6>

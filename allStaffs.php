@@ -97,7 +97,9 @@
 
         <h4 class="text-center text-light mb-2">Staffs</h4>
         <div class="card-deck row">
-            <?php foreach($rows as $row) : ?>
+            <?php foreach($rows as $row) : 
+                $staff_rating = $retrieve->calcStaffRate($row['staff_id']); 
+            ?>
 
                 <div class="col-md-4 col-lg-3 mb-3">
                     <div class="card bg-secondary text-light service-item">
@@ -112,13 +114,16 @@
 
                         <div class="card-body">
                             <h5 class="card-title text-light text-center"><?= $row['name'] ; ?></h5>
-                            <p class="card-text text-center"><?= $retrieve->getServiceNameById($row['service_id']); ?></p>
-                            <p class="card-text text-center"><?= $row['position']; ?></p>
+                            <p class="card-text text-center text-capitalize"><?= $retrieve->getServiceNameById($row['service_id']); ?></p>
+                            <p class="card-text text-center text-capitalize"><?= $row['position']; ?></p>
                             <p class="card-text text-center">Rate: 
-                                <?php if($retrieve->calcStaffRate($row['staff_id']) != "No Rate") : ?>
-                                    <a href="staff_reviews.php?id=<?= $row['staff_id']; ?>" class="text-warning"><?= $retrieve->calcStaffRate($row['staff_id']); ?></a>
+                                <?php if($staff_rating != "No Rate") : if($staff_rating >= 3) : ?>
+                                    <a href="staff_reviews.php?id=<?= $row['staff_id']; ?>" class="text-warning"><?= $staff_rating; ?></a>
+                                
                                 <?php else : ?>
-                                    <?= $retrieve->calcStaffRate($row['staff_id']); ?>
+                                    <a href="staff_reviews.php?id=<?= $row['staff_id']; ?>" class="" style="color: #CD1F14;"><?= $staff_rating; ?></a>
+                                <?php endif ; else : ?>
+                                    <?= $staff_rating; ?>
                                 <?php endif ; ?>
                             </p>
                         </div><!--card body-->

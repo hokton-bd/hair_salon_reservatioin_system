@@ -40,8 +40,8 @@
                 </select>
             </div>
             <div class="row mb-2">
-                <span class="text-light col-2">Start Date</span><input type="date" name="start_date" id="start_date" class="form-control mr-1 ml-0 col-3" required min="">
-                <span class="text-light col-2">End Date</span><input type="date" name="end_date" id="end_date" class="form-control mr-1 ml-0 col-3" required min="">
+                <span class="text-light col-2">Start Date</span><input type="date" name="start_date" id="start_date" class="form-control mr-1 ml-0 col-3" required min="<?= $date; ?>">
+                <span class="text-light col-2">End Date</span><input type="date" name="end_date" id="end_date" class="form-control mr-1 ml-0 col-3" required min="" disabled>
             </div>
             <div class="row mb-2">
                 <span class="text-light col-2">Start Time</span><input type="time" name="start_time" id="" class="form-control mr-1 ml-0 col-3" min="9:00" required>

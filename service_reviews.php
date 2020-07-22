@@ -23,8 +23,8 @@
     <section class="services-section spad pt-5">
     <div class="container">
 
-        <a href="allStaffs.php" class="btn btn-outline-light">Back</a>
-        <h3 class="text-center text-white mb-5">Staff Reviews</h3>
+        <a href="allServices.php" class="btn btn-outline-light">Back</a>
+        <h3 class="text-center text-white mb-5">Service Reviews</h3>
 
         <table class="table table-hover mb-0 text-center">
             <thead class="thead-dark">
@@ -41,7 +41,7 @@
                    <tr>
                        <td><?= substr($review['reservation_date'], 5) ;?></td>
                        <td><?= $retrieve->getUserNameById($review['user_id']) ;?></td>
-                       <td><?= $review['service_rating'] ;?></td>
+                       <td><?= number_format($review['service_rating'], 1) ;?></td>
                        <td><?= $review['comment'] ;?></td>
                    </tr>     
                 <?php endforeach; ?>

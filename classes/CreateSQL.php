@@ -86,7 +86,7 @@
                 if($this->conn->query($sql_c_s)) {
                     $_SESSION['message'] = "";
                     move_uploaded_file($_FILES['staff_picture']['tmp_name'], $target_file);
-                    echo "<script>window.location = 'addStaff.php'</script>";
+                    return true;
                 } else {
                     echo $this->conn->error;
                 }
@@ -187,7 +187,7 @@
 
             $sql_c = "INSERT INTO schedule(staff_id, start_date, end_date, shift_start, shift_end, break_start, break_end, day_off) VALUES ('$staff_id', '$start_date', '$end_date', '$start_time', '$end_time', '$break_time', '$break_end', '$day_off')";
 
-            if($start_date > date('Y-m-d') && $start_date < $end_date && $this->conn->query($sql_c)) {
+            if($this->conn->query($sql_c)) {
                 return true;
             } else {
                 echo $this->conn->error;

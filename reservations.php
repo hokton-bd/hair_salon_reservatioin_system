@@ -17,7 +17,7 @@
     <section class="services-section spad pt-5">
     <div class="container">
 
-        <a href="staffDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>
+        <a href="staffDashboard.php" class="btn btn-outline-light mb-2">Back to Dashboard</a>
         <h3 class="text-center text-white mb-5"><?= date('Y / m / d'); ?> Reservations</h3>
         
         <?php 

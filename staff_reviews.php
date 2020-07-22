@@ -41,7 +41,7 @@
                    <tr>
                        <td><?= substr($review['reservation_date'], 5) ;?></td>
                        <td><?= $retrieve->getUserNameById($review['user_id']) ;?></td>
-                       <td><?= $review['staff_rating'] ;?></td>
+                       <td><?= number_format($review['staff_rating'], 1) ;?></td>
                        <td><?= $review['comment'] ;?></td>
                    </tr>     
                 <?php endforeach; ?>

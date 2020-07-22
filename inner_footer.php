@@ -94,13 +94,6 @@
                     }
                 })
             })
-
-
-            $(window).reload(function() {
-                $.ajax({
-                    url:'ajax.php',
-                });
-            })
         });
 
         $(document).ready(function() {
@@ -166,8 +159,18 @@
 
             $('#start_date').change(function() {
                 var start_date = $('#start_date').val();
+                $('#end_date').removeAttr('disabled');
                 $('#end_date').attr('min', start_date);
-
+                
+                $.ajax({
+                    type: 'GET',
+                    url: 'shift_ajax.php',
+                    data:{start_date:start_date},
+                    success: function(data) {
+                        data = $.trim(data);
+                        $('#end_date').attr('max', data);
+                    }
+                });
             });
 
             $('#start_date').change(function() {

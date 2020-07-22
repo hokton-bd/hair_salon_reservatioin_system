@@ -34,7 +34,7 @@
             $services = $retrieve->getAllServices();
             $reservations = $retrieve->getDailyDoneReservations($date);
 ?>
-<h5 class="text-center text-light col-12 mb-2">Daily Report</h5>
+<h5 class="text-center text-light col-12 mb-2">Daily Income Report</h5>
     <table class="table table-light mb-0 text-center">
         <thead class="thead-dark">
             <tr>
@@ -133,7 +133,7 @@
             $monthly_reservations = $retrieve->getMonthlyDoneReservations($month);
 ?>
 
-<h5 class="text-center text-light col-12 mb-2">Monthly Report</h5>
+<h5 class="text-center text-light col-12 mb-2">Monthly Income Report</h5>
     <table class="table table-light mb-0 text-center">
         <thead class="thead-dark">
             <tr>

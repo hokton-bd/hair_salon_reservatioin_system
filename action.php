@@ -66,7 +66,9 @@
 
     } else if(isset($_POST['add_staff'])) { //add new staff
         if($retrieve->checkMultipleStaff() == true && $retrieve->checkMultipleAccount() == true) {
-            $create->addStaff();
+            if($create->addStaff() == true) {
+                echo "<script>window.location = 'allStaffs.php'</script>";
+            }
         } else {
             $_SESSION['message'] = "This staff is already existed or this email is already registered";
             echo "<script>window.location = 'addStaff.php'</script>";

@@ -25,7 +25,10 @@
         <h3 class="text-center text-white mb-5">All Services</h3>
 
         <div class="card-deck row">
-            <?php foreach($rows as $row) : ?>
+            <?php foreach($rows as $row) : 
+                $service_rating = $retrieve->calcServiceRate($row['service_id']);
+                $service_id = $row['service_id'];
+            ?>
 
                 <div class="col-md-4 col-lg-3 mb-3">
                     <div class="card bg-secondary text-light service-item">
@@ -39,27 +42,29 @@
                         </div><!--card img box-->
 
                         <div class="card-body">
-                            <h5 class="card-title text-light text-center"><?= $row['service_name'] ; ?></h5>
+                            <h5 class="card-title text-light text-center text-uppercase"><?= $row['service_name'] ; ?></h5>
                             <p class="card-text text-center"><?= $row['service_description']; ?></p>
                             <p class="card-text text-center">Rate: 
-                                <?php if($retrieve->calcServiceRate($row['service_id']) != false) : ?>
-                                    <a href="service_reviews.php?id=<?= $row['service_id']; ?>" class="text-warning"><?= $retrieve->calcServiceRate($row['service_id']) ;?></a>
+                                <?php if($service_rating != false) : if($service_rating >= 3) : ?>
+                                    <a href="service_reviews.php?id=<?= $service_id; ?>" class="text-warning"><?= $service_rating ;?></a>
                                 <?php else : ?>
+                                    <a href="service_reviews.php?id=<?= $service_id; ?>" class="text-danger"><?= $service_rating ;?></a>
+                                <?php endif; else : ?>
                                     <span class="text-light">No Rate</span>
-                                <?php endif; ?>
+                                <?php endif ; ?>
                             </p>
                         </div><!--card body-->
 
                         <div class="card-footer text-center">
                             Price: <?= $row['price']; ?> PHP
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-light mt-1 mx-auto" data-toggle="modal" data-target="#service_<?= $row['service_id']; ?>">
+                            <button type="button" class="btn btn-outline-light mt-1 mx-auto" data-toggle="modal" data-target="#service_<?= $service_id; ?>">
                               De/Activate
                             </button>
-                            <a type="button" href="updateService.php?id=<?= $row['service_id']; ?>" class="btn btn-outline-info text-white mt-2 service-update-btn">Update</a>
+                            <a type="button" href="updateService.php?id=<?= $service_id; ?>" class="btn btn-outline-info text-white mt-2 service-update-btn">Update</a>
                             
                             <!-- Modal -->
-                            <div class="modal fade" id="service_<?= $row['service_id']?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                            <div class="modal fade" id="service_<?= $service_id?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -79,7 +84,7 @@
                                         </div><!--modal body-->
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                            <a href="action.php?actiontype=change&id=<?= $row['service_id']?>" type="button" class="btn btn-info">Yes</a>
+                                            <a href="action.php?actiontype=change&id=<?= $service_id?>" type="button" class="btn btn-info">Yes</a>
                                         </div><!--modal footer-->
                                     </div><!--modal content-->
                                 </div><!--modal dialog-->

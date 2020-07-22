@@ -336,6 +336,7 @@
             $sql_6 = "UPDATE staff_owner SET admin_status = 'A'";
             $sql_7 = "UPDATE users SET admin_status = 'A'";
             $sql_8 = "UPDATE user_coupons SET admin_status = 'A'";
+            $sql_9 = "UPDATE reviews SET admin_status = 'A'";
 
             $this->conn->query($sql_1);
             $this->conn->query($sql_2);
@@ -345,6 +346,7 @@
             $this->conn->query($sql_6);
             $this->conn->query($sql_7);
             $this->conn->query($sql_8);
+            $this->conn->query($sql_9);
 
             return true;
         }
@@ -359,6 +361,7 @@
             $sql_6 = "UPDATE staff_owner SET admin_status = 'D'";
             $sql_7 = "UPDATE users SET admin_status = 'D'";
             $sql_8 = "UPDATE user_coupons SET admin_status = 'D'";
+            $sql_9 = "UPDATE reviews SET admin_status = 'D'";
 
             $this->conn->query($sql_1);
             $this->conn->query($sql_2);
@@ -368,6 +371,7 @@
             $this->conn->query($sql_6);
             $this->conn->query($sql_7);
             $this->conn->query($sql_8);
+            $this->conn->query($sql_9);
 
             return true;
         }

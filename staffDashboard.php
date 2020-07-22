@@ -65,6 +65,7 @@
                             </button>
                             <div class="dropdown-menu profile-menu">
                                 <a class="dropdown-item" href="updateStaffProfile.php?id=<?= $staff_id; ?>">Update Profile</a>
+                                <a class="dropdown-item" href="staff_ownRating.php?id=<?= $staff_id; ?>">Check Rating</a>
                             </div>
                         </div>
 

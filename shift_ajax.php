@@ -37,3 +37,11 @@
         </label>
 
 <?php endif; endforeach ; endif; ?>
+
+<?php 
+    if(isset($_GET['start_date'])) {
+        $start_date = $_GET['start_date'];
+        $time_stamp = strtotime($start_date.'+7 day');
+        echo date('Y-m-d', $time_stamp);
+    }
+; ?>

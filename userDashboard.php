@@ -13,6 +13,8 @@
 
     $user_id = $retrieve->getUserIdByLoginId($_SESSION['login_id']);
     list($name, $birthday, $gender, $contact_number, $user_status, $email, $login_id) = $retrieve->getEachUser($user_id);
+    $coming_reservations = $retrieve->getComingReservations($user_id);
+    $history = $retrieve->getUserHistoryReservation($user_id)
  ?>
 
     <!-- Hero Area Section Begin -->
@@ -47,7 +49,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($retrieve->getComingReservations($user_id) as $row) : ?>
+                    <?php if($coming_reservations != false) : ?>
+                    <?php foreach($coming_reservations as $row) : ?>
                     <?php if($row['reservation_status'] == "O") : ?>
                         <tr>
                             <td><?= $row['reservation_date']; ?></td>
@@ -83,6 +86,7 @@
                         </tr>
                     <?php endif; ?>
                     <?php endforeach ; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div><!--end col-5 -->
@@ -99,22 +103,45 @@
                         <th>PRICE</th>
                         <th></th>
                     </tr>
-                    <?php foreach($retrieve->getUserHistoryReservation($user_id) as $row_h) : ?>
+                    <?php if($history != false) : ?>
+                    <?php foreach($history as $row_h) : 
+                            $reservation_id = $row_h['reservation_id']; 
+                            $service_rating = number_format($retrieve->getEachReservationServiceRate($reservation_id), 1);
+                            $staff_rating = number_format($retrieve->getEachReservationStaffRate($reservation_id), 1)
+                        ?>
                         <tr>
                             <td><?= $row_h['reservation_date']; ?></td>
                             <td><?= substr($row_h['reservation_time'], 0, 5); ?></td>
-                            <td><?= $retrieve->getServiceNameById($row_h['service_id']); ?></td>
-                            <td><?= $retrieve->getStaffNameById($row_h['staff_id']); ?></td>
+                            <td class="text-uppercase">
+                                <a class="text-dark rating-detail" href="review_detail.php?id=<?= $reservation_id; ?>">
+                                    <?= $retrieve->getServiceNameById($row_h['service_id']); ?>(
+                                    <?php if($service_rating >= 3) : ?>
+                                        <span class="text-primary"><?= $service_rating ;?></span>
+                                    <?php else : ?>
+                                        <span class="text-danger"><?= $service_rating ;?></span>
+                                    <?php endif ; ?>)
+                                </a>
+                            </td>
+                            <td>
+                                <a class="text-dark rating-detail" href="review_detail.php?id=<?= $reservation_id; ?>">
+                                    <?= $retrieve->getStaffNameById($row_h['staff_id']); ?>(
+                                    <?php if($staff_rating >= 3) : ?>
+                                        <span class="text-primary"><?= $staff_rating ;?></span>
+                                    <?php else : ?>
+                                        <span class="text-danger"><?= $staff_rating ;?></span>
+                                    <?php endif ; ?>)
+                                </a>
+                            </td>
                             <td><?= $retrieve->getServicePriceById($row_h['service_id']); ?> PHP</td>
                             <td>
-                                <?php if($retrieve->checkReviewed($row_h['reservation_id']) == true) : ?>
+                                <?php if($retrieve->checkReviewed($reservation_id) == true) : ?>
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#review_<?= $row_h['reservation_id']; ?>">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#review_<?= $reservation_id; ?>">
                                   Review
                                 </button>
                                 
                                 <!-- Modal -->
-                                <div class="modal fade" id="review_<?= $row_h['reservation_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                <div class="modal fade" id="review_<?= $reservation_id; ?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -124,7 +151,7 @@
                                                     </button>
                                             </div>
                                             <form method="post" action="action.php">
-                                                <input type="hidden" name="reservation_id" value="<?= $row_h['reservation_id']; ?>">
+                                                <input type="hidden" name="reservation_id" value="<?= $reservation_id; ?>">
                                                 <div class="modal-body">
                                                     <p class="text-dark font-weight-bold">Service</p>
                                                     <div class="row review-list">
@@ -181,6 +208,7 @@
                             </td>
                         </tr>
                     <?php endforeach ; ?>
+                    <?php endif ; ?>
                 </thead>
                 <tbody>
                     

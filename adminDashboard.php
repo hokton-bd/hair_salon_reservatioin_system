@@ -57,7 +57,7 @@
                                 Action
                             </button>
                             <div class="dropdown-menu reports-menu">
-                                <a class="dropdown-item" href="reports.php">Browse Reports</a>
+                                <a class="dropdown-item" href="reports.php">Browse Income</a>
                                 <a class="dropdown-item" href="allStaffs.php">Browse Staffs</a>
                             </div>
                         </div>
@@ -86,6 +86,7 @@
                                 <?php else : ?>
                                     <a class="dropdown-item" href="action.php?actiontype=activate_company">Activate</a>
                                 <?php endif ; ?>
+                                <a class="dropdown-item" href="admin_browseInfo.php">Browse Info</a>
                             </div>
                         </div>
 
