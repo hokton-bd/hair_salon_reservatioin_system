@@ -202,6 +202,20 @@
                 $('#select-service-img').change(function() {
                 readURL(this, '#display-service-img');
                 });
+
+            //rebook
+            
+            $('#rebook').on('click', function() {
+                var id = $(this).attr('data-id');
+                $.ajax({
+                    type:'GET',
+                    url:'ajax.php',
+                    data:{id:id},
+                    
+                });
+            });
+
+
         });
 
         

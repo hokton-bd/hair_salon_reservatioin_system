@@ -2,7 +2,9 @@
     session_start();
     require_once 'classes/connection.php';
     require_once 'classes/RetrieveSQL.php';
+    require_once 'classes/UpdateSQL.php';
     $retrieve = new RetrieveSQLStatements();
+    $update = new UpdateSQLStatements();
 
     if(isset($_GET['service'])) : 
         $reserve_date = $_GET['reserve_date'];
@@ -260,6 +262,9 @@
     </table>
 <?php endif ; ?>
 
-<?php
-    
+<?php //rebook
+    if(isset($_GET['id'])) {
+        $uc_id = $_GET['id'];
+        $update->changeUserCouponStatusToActive($uc_id);
+    }
 ; ?>

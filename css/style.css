@@ -1893,6 +1893,8 @@ coupon_reports.php
 ====================================== */
 .coupon-table-body {
 	width: 16.6666666%;
+	max-width: 113px;
+	overflow: hidden;
 }
 
 

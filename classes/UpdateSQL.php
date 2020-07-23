@@ -375,6 +375,36 @@
 
             return true;
         }
+
+        public function rebook($user_id, $end_time, $reservation_id) {
+
+            $service_id = $_SESSION['service'];
+            $staff_id = $_SESSION['staff'];
+            $date = $_SESSION['date'];
+            $time = $_SESSION['time'];
+            $price = $_SESSION['price'];
+            if($_SESSION['uc_id']) {
+                $uc_id = $_SESSION['uc_id'];
+            }
+
+            $sql_u = "UPDATE reservations SET service_id = '$service_id', staff_id = '$staff_id', reservation_date = '$date', reservation_time = '$time', end_time = '$end_time', payment = '$price', uc_id = '$uc_id' WHERE reservation_id = '$reservation_id'";
+
+            if($this->conn->query($sql_u)) {
+                return true;
+            } else {
+                echo $this->conn->error;
+            }
+
+        }
+
+        public function changeUserCouponStatusToActive($uc_id) {
+            $sql_u = "UPDATE user_coupons SET uc_status = 'A' WHERE uc_id = '$uc_id'";
+            if($this->conn->query($sql_u)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
        
     }
     

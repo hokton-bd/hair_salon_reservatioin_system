@@ -13,8 +13,8 @@
 
     $user_id = $retrieve->getUserIdByLoginId($_SESSION['login_id']);
     list($name, $birthday, $gender, $contact_number, $user_status, $email, $login_id) = $retrieve->getEachUser($user_id);
-    $coming_reservations = $retrieve->getComingReservations($user_id);
-    $history = $retrieve->getUserHistoryReservation($user_id)
+    // $coming_reservations = $retrieve->getComingReservations($user_id);
+    $history = $retrieve->getUserHistoryReservation($user_id);
  ?>
 
     <!-- Hero Area Section Begin -->
@@ -49,14 +49,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if($coming_reservations != false) : ?>
-                    <?php foreach($coming_reservations as $row) : ?>
+                    <?php if($retrieve->getComingReservations($user_id) != false) : ?>
+                    <?php foreach($retrieve->getComingReservations($user_id) as $row) : 
+                            $staff_status = $retrieve->checkStaffStatus($row['staff_id']);
+                        ?>
                     <?php if($row['reservation_status'] == "O") : ?>
+                        <?php if($staff_status == "A") : ?>
                         <tr>
                             <td><?= $row['reservation_date']; ?></td>
                             <td><?= substr($row['reservation_time'], 0, 5); ?></td>
                             <td><?= $retrieve->getServiceNameById($row['service_id']); ?></td>
                             <td><?= $retrieve->getStaffNameById($row['staff_id']); ?></td>
+                            
                             <td><!-- Button trigger modal -->
                                 <button type="button" class="btn btn-warning text-light" data-toggle="modal" data-target="#reservation_<?= $row['reservation_id']; ?>">
                                 Cancel
@@ -84,7 +88,41 @@
                                 </div>
                             </td>
                         </tr>
-                    <?php endif; ?>
+                        <?php else : ?>
+                        <tr class="table-danger">
+                            <td><?= $row['reservation_date']; ?></td>
+                            <td><?= substr($row['reservation_time'], 0, 5); ?></td>
+                            <td><?= $retrieve->getServiceNameById($row['service_id']); ?></td>
+                            <td><?= $retrieve->getStaffNameById($row['staff_id']); ?></td>
+                            
+                            <td><!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger text-light" data-toggle="modal" data-target="#reservation_<?= $row['reservation_id']; ?>">
+                                Rebook
+                                </button>
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="reservation_<?= $row['reservation_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Rebook</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                            </div>
+                                            <div class="modal-body">
+                                               I'm sorry but this staff is not available. Please rebook and choose other staff or you can cancel this appointment. We apologize for your inconvenience.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a id="rebook" data-id="<?= $row['uc_id']; ?>" type="button" class="btn btn-primary" href="makeReservation.php?id=<?= $row['reservation_id']; ?>">Rebook</a>
+                                                <a href="action.php?actiontype=cancel_reserve&id=<?= $row['reservation_id']; ?>" type="button" class="btn btn-warning text-light">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endif; endif; ?>
                     <?php endforeach ; ?>
                     <?php endif; ?>
                 </tbody>
@@ -101,6 +139,7 @@
                         <th>SERVICE</th>
                         <th>STAFF</th>
                         <th>PRICE</th>
+                        <th></th>
                         <th></th>
                     </tr>
                     <?php if($history != false) : ?>
@@ -133,6 +172,9 @@
                                 </a>
                             </td>
                             <td><?= $retrieve->getServicePriceById($row_h['service_id']); ?> PHP</td>
+                            <td>
+                                <a href="makeReservation.php?reservation_id=<?= $row_h['reservation_id']; ?>&service=<?= $row_h['service_id']; ?>&staff=<?= $row_h['staff_id']; ?>" class="btn btn-primary">Re order</a>
+                            </td>
                             <td>
                                 <?php if($retrieve->checkReviewed($reservation_id) == true) : ?>
                                 <!-- Button trigger modal -->

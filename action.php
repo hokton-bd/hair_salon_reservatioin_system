@@ -245,6 +245,31 @@
                 header("Location: makeReservation.php");
             }
 
+    } else if(isset($_POST['confirm_rebook'])) {
+
+        $_SESSION['date'] = $_POST['date'];
+        $_SESSION['time'] = $_POST['time'];
+        $_SESSION['service'] = $_POST['service'];
+        $_SESSION['staff'] = $_POST['staff'];
+        $_SESSION['reservation_id'] = $_POST['reservation_id'];
+
+        if($retrieve->checkOverLappStaff($_POST['staff'], $_POST['date'], $_POST['time']) == true) {
+
+            if($_POST['coupon']) {
+                $_SESSION['uc_id'] = $_POST['coupon'];
+                $price = $retrieve->calcDiscountPay($_POST['service'], $_POST['coupon']);
+            } else {
+                list(, , $price, , , ) = $retrieve->getEachService($_POST['service']);
+            }
+
+            $_SESSION['price'] = $price;
+            header("Location: confirmReserve.php");
+
+        } else {
+            $_SESSION['message'] = "I'm sorry but this staff will not be available that time";
+            header("Location: makeReservation.php");
+        }
+
     } else if(isset($_POST['generate_coupon'])) {
         
         if($create->generateCoupon() == true) {
@@ -255,10 +280,14 @@
 
     } else if(isset($_POST['add_shift'])) {
 
-        if($create->addShift() == true) {
-            header("Location: schedule.php");
+        // if($retrieve->checkOverLappShift() == true && $create->addShift() == true) {
+        if($retrieve->checkOverLappShift() == true) {
+            $_SESSION['message'] = "Overlapping shift";
+            echo "<script>window.location = 'schedule.php'</script>";
         } else {
-            echo "FAIL";
+            if($create->addShift() == true) {
+                header("Location: schedule.php");
+            }
         }
 
     } else if(isset($_POST['review'])) {
@@ -348,6 +377,26 @@
             }
         } 
 
+    } else if($_GET['actiontype'] == "rebook") {
+
+        $user_id = $retrieve->getUserIdByLoginId($_SESSION['login_id']);
+        list(, , $end_time) = $retrieve->calcEndTime($_SESSION['service'], $_SESSION['date'], $_SESSION['time']);
+        
+        if($update->rebook($user_id, $end_time, $_SESSION['reservation_id']) == true) {
+
+            if($update->userCouponDone($_SESSION['uc_id']) == true) {
+
+                unset($_SESSION['date']);
+                unset($_SESSION['time']);
+                unset($_SESSION['service']);
+                unset($_SESSION['staff']);
+                unset($_SESSION['price']);
+                unset($_SESSION['uc_id']);
+                unset($_SESSION['reservation_id']);
+                header("Location: userDashboard.php");
+            }
+        } 
+
     } else if($_GET['actiontype'] == "deactivateCoupon") {
 
         if($update->deactivateCoupon($_GET['id'])) {
@@ -359,6 +408,7 @@
         $coupon_id = $_GET['id'];
         $user_id = $retrieve->getUserIdByLoginId($_SESSION['login_id']);
         if($create->getCoupon($user_id) == true && $update->couponGot($coupon_id)) {
+            $_SESSION['message'] = "You got a coupon!";
             header("Location: userDashboard.php");
         } 
 
@@ -391,7 +441,6 @@
 
         header("Location: adminDashboard.php");
 
-    }
-
+    } 
 
 ; ?>

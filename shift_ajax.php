@@ -22,18 +22,22 @@
         $reserve_date = $_GET['reserve_date'];
         $service_id = $_GET['service_id'];
 
-        $staffs = $retrieve->getServiceStaff($_SESSION['service']);
-        foreach($staffs as $staff) :
+        // if(isset($_SESSION['service'])) {
+        //     $staffs = $retrieve->getServiceStaff($_SESSION['service']); //new order
+        // } else {
+        //     $staffs = $retrieve->getServiceStaff($_GET['service']); //re order
+        // }
+        $staffs = $retrieve->getServiceStaff($service_id); //re order
+        foreach($staffs as $staff) : 
         if($retrieve->getDateShift($reserve_date, $staff['staff_id']) == true && $staff['service_id'] == $service_id) :
 ?>
 
-    <h5 class="text-center text-light col-12 mb-2">Choose Staff</h5>
         <label for="<?= $staff['staff_id']; ?>" class="col-4">
             <div class="staff-img-box mb-2">
                 <img class="staff-img" src="img/staffs/<?= $staff['picture']?>" alt="">
             </div>
             <input type="radio" class="staff-radio"  name="staff" value="<?= $staff['staff_id']?>" id="<?= $staff['staff_id']?>" required>
-            <span class="staff-name ml-3 text-light text-center mx-auto"><?= $staff['name']; ?></span>
+            <span class="staff-name ml-3 text-light text-center mx-auto"><?= $staff['name']; ?> / Rate : <span class="text-warning"><?= $retrieve->calcStaffRate($staff['staff_id']) ;?></span></span>
         </label>
 
 <?php endif; endforeach ; endif; ?>

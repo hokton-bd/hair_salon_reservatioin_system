@@ -25,7 +25,7 @@
         <table class="table text-center table-hover table-light table-striped mb-0 mt-3 w-100">
             <thead class="thead-dark d-table w-100">
                 <tr>
-                    <th class="coupon-table-body">NAME</th>
+                    <th class="coupon-table-body" width="200px">NAME</th>
                     <th class="coupon-table-body">VALUE</th>
                     <th class="coupon-table-body">EXPIRATION</th>
                     <th class="coupon-table-body">USED</th>
@@ -36,18 +36,16 @@
             <tbody style="overflow: scroll; max-height: 245px;" class="d-block w-100">
                 <?php if($coupons != false) : foreach($coupons as $coupon) : ?>
                     <tr class="d-table w-100">
-                        <td class="coupon-table-body"><span class="badge badge-primary mr-1"><?= $coupon['COUNT(*)']; ?></span><?= $coupon['coupon_name']; ?></td>
-                        <td class="coupon-table-body"><?= $coupon['coupon_value']; ?> %</td>
-                        <td class="coupon-table-body"><?= $coupon['expiration']; ?></td>
-                        <td class="coupon-table-body"><?= $retrieve->getUsedCoupons($coupon['coupon_name']); ?></td>
-                        <td class="coupon-table-body"><?= $retrieve->getHandCoupons($coupon['coupon_name']); ?></td>
-                        <td class="coupon-table-body"><?= $retrieve->getLeftCoupons($coupon['coupon_name']); ?></td>
+                        <td class="coupon-table-body word-wrap"><span class="badge badge-primary mr-1"><?= $retrieve->getTotalCouponAmount($coupon['coupon_name']); ?></span><?= $coupon['coupon_name']; ?></td>
+                        <td class="coupon-table-body word-wrap"><?= $coupon['coupon_value']; ?> %</td>
+                        <td class="coupon-table-body word-wrap"><?= $coupon['expiration']; ?></td>
+                        <td class="coupon-table-body word-wrap"><?= $retrieve->getUsedCoupons($coupon['coupon_name']); ?></td>
+                        <td class="coupon-table-body word-wrap"><?= $retrieve->getHandCoupons($coupon['coupon_name']); ?></td>
+                        <td class="coupon-table-body word-wrap"><?= $retrieve->getLeftCoupons($coupon['coupon_name']); ?></td>
                     </tr>                    
                 <?php endforeach; endif ; ?>
             </tbody>
         </table>
-
-        
 
     </div><!--end container-->
     </section>

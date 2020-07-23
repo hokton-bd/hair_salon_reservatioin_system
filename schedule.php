@@ -25,6 +25,7 @@
     <!-- Hero Area Section Begin -->
     <?php include 'heroArea.php' ; ?>
     <!-- Hero Area Section End -->
+    <?php $retrieve->displayMessage(); ?>
     <section class="services-section spad pt-5">
     <div class="container">
     <a href="ownerDashboard.php" class="btn btn-outline-light">Back to Dashboard</a>

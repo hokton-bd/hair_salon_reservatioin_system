@@ -385,20 +385,29 @@
 
                         if($row['reservation_time'] > $time) {
                             $rows[] = $row;
-                            return $rows;
                         }
                         
                     } else if($row['reservation_date'] > $today) {
                         $rows[] = $row;
-                        return $rows;
                     }
                 }
+
+                return $rows;
 
             } else {
                 return false;
             }
 
         } // end of getComingReservations
+
+        public function checkStaffStatus($staff_id) {
+            $sql_r = "SELECT staff_status FROM staff_owner WHERE staff_id = '$staff_id'";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                return $row['staff_status'];
+            }
+        }
 
         public function getServiceNameById($service_id) {
             $sql_r = "SELECT * FROM services WHERE service_id = '$service_id'";
@@ -595,9 +604,7 @@
                 $end_date_time = date('Y-m-d H:i:s', $added_hour_min); //calc end time
                 $end_date = substr($end_date_time, 0, 10);
                 $end_time = substr($end_date_time, 11, -3);
-                var_dump($end_date_time);
-                var_dump($end_date);
-                var_dump($end_time);
+
                 return [$end_date_time, $end_date, $end_time];
             }
 
@@ -646,7 +653,7 @@
 
         public function getAllCoupons() {
 
-            $sql_r = "SELECT coupon_id, coupon_name, coupon_value, expiration, description, coupon_status, COUNT(*) FROM coupons WHERE coupon_status = 'A' GROUP BY coupon_name";
+            $sql_r = "SELECT coupon_id, coupon_name, coupon_value, expiration, description, coupon_status, COUNT(*) FROM coupons WHERE coupon_status != 'D' GROUP BY coupon_name";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -659,6 +666,16 @@
                 return false;
             }
 
+        }
+
+        public function getTotalCouponAmount($coupon_name) {
+            $sql_r = "SELECT * FROM coupons WHERE coupon_name = '$coupon_name'";
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                return $result->num_rows;
+            } else {
+                return 0;
+            }
         }
 
         public function getUsedCoupons($coupon_name) {
@@ -720,7 +737,7 @@
 
         public function getUserCoupons($user_id) {
             
-            $sql_r = "SELECT * FROM user_coupons WHERE user_id = '$user_id'";
+            $sql_r = "SELECT * FROM user_coupons INNER JOIN coupons ON user_coupons.coupon_id = coupons.coupon_id WHERE user_coupons.user_id = '$user_id' ORDER BY coupons.coupon_name ASC";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -755,7 +772,10 @@
         }
 
         public function getServiceStaff($service_id) {
-            $sql_r = "SELECT * FROM staff_owner WHERE service_id = '$service_id'";
+            $sql_r = "SELECT * FROM staff_owner INNER JOIN login ON staff_owner.login_id = login.login_id 
+                    WHERE staff_owner.service_id = '$service_id' 
+                    AND login.status = 'S' 
+                    AND staff_owner.staff_status = 'A'";
             $result = $this->conn->query($sql_r);
             if($result->num_rows > 0) {
                 $rows = array();
@@ -763,6 +783,8 @@
                     $rows[] = $row;
                 }
                 return $rows;
+            } else {
+                return false;
             }
 
         }
@@ -924,7 +946,7 @@
         }
 
         public function getAllSchedule() {
-            $sql_r = "SELECT * FROM schedule";
+            $sql_r = "SELECT * FROM schedule ORDER BY start_date ASC";
             $result = $this->conn->query($sql_r);
 
             if($result->num_rows > 0) {
@@ -1248,6 +1270,32 @@
                 return $total;
             } else {
                 return $total;
+            }
+        }
+
+        public function checkOverLappShift() {
+            $staff_id = $_POST['staff_list'];
+            $start_date = $_POST['start_date'];
+
+            $sql_r = "SELECT * FROM schedule WHERE staff_id = '$staff_id' AND end_date > '$start_date'";
+
+            $result = $this->conn->query($sql_r);
+            if($result->num_rows > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public function getLastTime($reservation_id) {
+            $sql_r = "SELECT * FROM reservations WHERE reservation_id = '$reservation_id'";
+            $result = $this->conn->query($sql_r);
+
+            if($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                return $row['reservation_time'];
+            } else {
+                return false;
             }
         }
 
